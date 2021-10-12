@@ -7,8 +7,8 @@
     <ProjectGuid>{DEAF4438-8089-40ED-8175-398E1261D45B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>JotunnModStub</RootNamespace>
-    <AssemblyName>JotunnModStub</AssemblyName>
+    <RootNamespace>ChickenBoo</RootNamespace>
+    <AssemblyName>ChickenBoo</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -77,9 +77,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HelmetMounter.cs" />
     <Compile Include="Properties\IgnoreAccessModifiers.cs" />
-    <Compile Include="JotunnModStub.cs" />
+    <Compile Include="ChickenBoo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomEggLayer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -93,6 +95,9 @@
     <None Include="Package\manifest.json" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="D:\HearthNHome\valheim\AssetBundles\StandaloneWindows\chickenboo">
+      <Link>chickenboo</Link>
+    </EmbeddedResource>
     <Content Include="Package\icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
