@@ -1,11 +1,5 @@
-﻿// JotunnModStub
-// a Valheim mod skeleton using Jötunn
-// 
-// File:    JotunnModStub.cs
-// Project: JotunnModStub
-
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
@@ -19,7 +13,6 @@ namespace ChickenBoo
 {
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
     [BepInDependency(Jotunn.Main.ModGuid)]
-    [BepInDependency("com.rockerkitten.boneappetit")]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.Minor)]
     internal class ChickenBoo : BaseUnityPlugin
     {
@@ -27,11 +20,11 @@ namespace ChickenBoo
 
         public const string PluginGUID = "com.zarboz.chickenboo";
         public const string PluginName = "ChickenBoo";
-        public const string PluginVersion = "0.0.1";
+        public const string PluginVersion = "0.0.4";
         public static CustomLocalization Localization = LocalizationManager.Instance.GetLocalization();
         internal RandomEggLayer _eggLayer;
         internal static Harmony _harmony;
-        public GameObject chiken { get; set; }
+        public static GameObject chiken { get; set; }
 
         #endregion
 
@@ -57,6 +50,7 @@ namespace ChickenBoo
         {
             LoadAssets();
             SetupConfigs();
+            SetupLocalization();
             ItemManager.OnItemsRegistered += RegisterRockersEggs;
             PrefabManager.OnVanillaPrefabsAvailable += SetupFoods;
             PrefabManager.OnPrefabsRegistered += LoadHat;
@@ -71,8 +65,7 @@ namespace ChickenBoo
 
         private void RegisterRockersEggs()
         {
-            Debug.LogError("Running the RK Addon");
-            var RK_egg = PrefabManager.Instance.GetPrefab("rk_egg");
+            var RK_egg = PrefabManager.Instance.GetPrefab("raw_egg");
             chiken.GetComponent<RandomEggLayer>().EggObject = RK_egg;
             _eggLayer = chiken.GetComponent<RandomEggLayer>();
             SetupConsumables();
@@ -133,7 +126,7 @@ namespace ChickenBoo
             {
                 Amount = 1,
                 Description = "Grilled Chicken Meat",
-                CraftingStation = "piece_cookingstation",
+                CraftingStation = "piece_cauldron",
                 Requirements = new RequirementConfig[]
                 {
                     new RequirementConfig { Amount = 1, Item = "raw_chicken", Recover = false, AmountPerLevel = 1 }
@@ -197,7 +190,24 @@ namespace ChickenBoo
                 }
             });
             ItemManager.Instance.AddItem(CI);
+            
+            
+            var sombrero = assetBundle.LoadAsset<GameObject>("chickensombrero");
+            CustomItem somb = new CustomItem(sombrero, true, new ItemConfig
+            {
+                Amount = 1,
+                CraftingStation = "piece_workbench",
+                RepairStation = "piece_workbench",
+                Requirements = new RequirementConfig[]
+                {
+                    new RequirementConfig { Amount = 1, Item = "Wood", Recover = true, AmountPerLevel = 1 }
+                }
+            });
+            ItemManager.Instance.AddItem(somb);
+                
+                
             PrefabManager.OnPrefabsRegistered -= LoadHat;
+
         }
 
         private void LoadAssets()
@@ -254,80 +264,137 @@ namespace ChickenBoo
         [HarmonyPatch(typeof(Tameable), nameof(Tameable.Interact))]
         public static class InteractPatch
         {
-            private static string hoverName;
-
-            public static bool Prefix(Humanoid user, bool hold, bool alt, Tameable __instance)
+            public static void Postfix(Tameable __instance)
             {
-                if (!__instance.m_nview.IsValid())
+                if (__instance.gameObject.GetComponent<RandomEggLayer>() != null)
                 {
-                    return false;
-                }
-
-                if (hold)
-                {
-                    return false;
-                }
-
-                if (alt)
-                {
-                    __instance.SetName();
-                    return true;
-                }
-
-                string hoverName = __instance.m_character.GetHoverName();
-                if (__instance.m_character.IsTamed())
-                {
-                    if (Time.time - __instance.m_lastPetTime > 1f)
+                    if (Input.GetKey(KeyCode.LeftAlt))
                     {
-                        __instance.m_lastPetTime = Time.time;
-                        __instance.m_petEffect.Create(__instance.transform.position, __instance.transform.rotation);
-                        if (__instance.m_commandable)
+                        try
                         {
-                            __instance.Command(user);
-                        }
-                        else
-                        {
-                            user.Message(MessageHud.MessageType.Center, hoverName + " $hud_tamelove");
-                        }
-                        //
-
-                        if (__instance.gameObject.GetComponent<RandomEggLayer>() != null)
-                        {
-                            if (!__instance.gameObject.GetComponent<RandomEggLayer>()._helmetMounter.HelmetMounted)
+                            var userinv = Player.m_localPlayer.GetInventory();
+                            foreach (var item in userinv.m_inventory)
                             {
-                                var userinv = user.GetInventory();
-                                foreach (var hat in from item in userinv.m_inventory
-                                    where item.m_shared.m_name == "$chicken_hat"
-                                    select item
-                                    into hat
-                                    let tmphat = user.m_inventory.GetItem(hat.m_shared.m_name)
-                                    let removedhat = user.m_inventory.RemoveOneItem(tmphat)
-                                    where removedhat
-                                    select hat)
+                                if (item.m_shared.m_name == "$chicken_hat")
                                 {
-                                    var hm = __instance.gameObject.GetComponent<RandomEggLayer>()._helmetMounter;
-                                    hm.HelmetObject.SetActive(true);
-                                    var znv = __instance.gameObject.GetComponent<ZNetView>();
-                                    znv.m_zdo.Set("$chicken_hat", true);
-                                    Debug.Log("I put a hat on lelz");
+                                    var tmphat = userinv.GetItem(item.m_shared.m_name);
+                                    if(userinv.RemoveOneItem(tmphat))
+                                    {
+                                        var hm = __instance.gameObject.GetComponent<RandomEggLayer>()._helmetMounter;
+                                        hm.HelmetObject.SetActive(true);
+                                        var znv = __instance.GetComponent<ZNetView>();
+                                        znv.m_zdo.Set("$chicken_hat", true);
+                                        hm.HelmetMounted = true;
+                                    }
+
                                 }
                             }
                         }
+                        catch (Exception e)
+                        {
+                            
+                        }
                         
-                        
-                        //
-                        return true;
                     }
 
-                    return false;
-                }
+                    if (Input.GetKey(KeyCode.LeftControl))
+                    {
+                        try
+                        {
+                            var userinv = Player.m_localPlayer.GetInventory();
+                            foreach (var item in userinv.m_inventory)
+                            {
+                                if (item.m_shared.m_name == "$chicken_sombrero")
+                                {
+                                    var tmphat = userinv.GetItem(item.m_shared.m_name);
+                                    if(userinv.RemoveOneItem(tmphat))
+                                    {
+                                        var hm = __instance.gameObject.GetComponent<RandomEggLayer>()._helmetMounter;
+                                        hm.GravesSombrero.SetActive(true);
+                                        var znv = __instance.GetComponent<ZNetView>();
+                                        znv.m_zdo.Set("$chicken_sombrero", true);
+                                        hm.HelmetMounted = true;
+                                    }
 
-                return false;
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                        }
+                    }
+                }
             }
         }
 
 
+        [HarmonyPatch(typeof(Tameable), nameof(Tameable.GetHoverText))]
 
+        public static class HoverTextPatch
+        {
+            public static void Postfix(ref string __result, Tameable __instance)
+            {
+                if (__instance.gameObject.GetComponent<RandomEggLayer>() != null)
+                {
+                    if(!__instance.gameObject.GetComponent<RandomEggLayer>()._helmetMounter.HelmetMounted)
+                      __result +=  global::Localization.instance.Localize("\n[<b><color=yellow>L-Alt + $KEY_Use</color></b>] To Equip Viking Hat\n[<b><color=yellow>L-Ctrl + $KEY_Use</color></b>] To Equip Sombrero");
+                }
+            }
+        }
+
+
+        [HarmonyPatch(typeof(SpawnSystem), nameof(SpawnSystem.Awake))]
+        public static class SpawnPatch
+        {
+            private static List<SpawnSystem.SpawnData> _spawnDatas = new List<SpawnSystem.SpawnData>();
+            public static void Prefix(SpawnSystem __instance)
+            {
+                foreach (var spawnData in __instance.m_spawners)
+                {
+                    if (spawnData.m_prefab.name == "Boar")
+                    {
+                        var tmp = spawnData.Clone();
+                        tmp.m_prefab = chiken;
+                        tmp.m_name = "ChickenBoo";
+                        tmp.m_spawnAtDay = true;
+                        tmp.m_spawnAtNight = true;
+                        tmp.m_maxSpawned = 10;
+                        tmp.m_enabled = true;
+                        _spawnDatas.Add(tmp);
+                    }
+                }
+
+                foreach (var spawnData in _spawnDatas)
+                {
+                    __instance.m_spawners.Add(spawnData);
+                }
+            }
+        }
+
+        #endregion
+
+        #region Localization
+
+        private void SetupLocalization()
+        {
+            Localization.AddTranslation("English", new Dictionary<string, string>
+            {
+                {"enemy_chicken","Chicken"},
+                {"raw_egg","Raw Egg"},
+                {"raw_egg_descrip","A fresh egg from your chicken. Great for cooking"},
+                {"raw_chicken","Raw Chicken"},
+                {"raw_chicken_descrip","Raw chicken meat for cooking."},
+                {"boiled_egg","A Boiled Egg"},
+                {"boiled_egg_descrip","A hard boiled egg, nutritious and delicious"},
+                {"fried_egg","Fried Egg"},
+                {"fried_egg_descrip","A fried egg for any time of day!"},
+                {"cooked_chicken","Grilled Chicken"},
+                {"cooked_chicken_descrip", "A nice grilled chicken leg"},
+                {"chicken_hat","Chicken Viking Hat"},
+                {"chicken_sombrero","A Sombrero for the chicken"},
+                {"chicken_sombrero_descrip","El Pollo Loco"}
+            });
+        }
 
         #endregion
 
