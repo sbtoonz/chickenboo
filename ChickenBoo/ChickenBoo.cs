@@ -136,7 +136,6 @@ namespace ChickenBoo
                 Description = "Raw chicken",
                 Enabled = false
             });
-            PrefabManager.Instance.AddPrefab(RawChicken);
             ItemManager.Instance.AddItem(RawChickenItem);
 
             GrilledChickenItem = new CustomItem(GrilledChicken, true, new ItemConfig
