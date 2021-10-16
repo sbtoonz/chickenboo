@@ -7,6 +7,7 @@ public class RandomEggLayer : MonoBehaviour
     [SerializeField] internal MonsterAI _monsterAI;
     [SerializeField] internal Humanoid _humanoid;
     [SerializeField] internal GameObject EggObject;
+    [SerializeField] internal HelmetMounter _helmetMounter;
     
     private void Awake()
     {
