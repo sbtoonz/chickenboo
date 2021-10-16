@@ -35,6 +35,8 @@ namespace ChickenBoo
         internal static ConfigEntry<int> SpawnVol1;
         internal static ConfigEntry<int> SpawnVol2;
         internal static ConfigEntry<int> SpawnVol3;
+        internal static ConfigEntry<float> FeatherChance;
+        
         private CustomItem RawEggItem;
         private CustomItem RawChickenItem;
         private CustomItem GrilledChickenItem;
@@ -69,6 +71,7 @@ namespace ChickenBoo
             chiken.GetComponent<RandomEggLayer>().EggObject = RK_egg;
             _eggLayer = chiken.GetComponent<RandomEggLayer>();
             SetupConsumables();
+            AddtoCharDrops();
             ItemManager.OnItemsRegistered -= RegisterRockersEggs;
         }
 
@@ -97,6 +100,19 @@ namespace ChickenBoo
             };
         }
 
+        private void AddtoCharDrops()
+        {
+            var chardrop = chiken.GetComponent<CharacterDrop>();
+            chardrop.m_drops.Add(new CharacterDrop.Drop
+            {
+                m_prefab = RetrieveGO("Feathers"),
+                m_chance = FeatherChance.Value,
+                m_amountMax = 6,
+                m_amountMin = 1,
+                m_levelMultiplier = true,
+                m_onePerPlayer = true
+            });
+        }
         private void SetupFoods()
         {
 
@@ -120,6 +136,7 @@ namespace ChickenBoo
                 Description = "Raw chicken",
                 Enabled = false
             });
+            PrefabManager.Instance.AddPrefab(RawChicken);
             ItemManager.Instance.AddItem(RawChickenItem);
 
             GrilledChickenItem = new CustomItem(GrilledChicken, true, new ItemConfig
@@ -254,6 +271,9 @@ namespace ChickenBoo
                 "This is the volume of eggs that will be laid the remaining 10% of the selection ranges",
                 new AcceptableValueRange<int>(1, 1000),
                 new ConfigurationManagerAttributes { IsAdminOnly = true }));
+
+            FeatherChance = Config.Bind("Chicken", "Feather Drop Chance", 0.5f,
+                "This is a representation of percent chance in number format that feathers will drop from the chicken");
 
         }
 
