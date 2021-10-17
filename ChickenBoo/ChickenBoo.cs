@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
@@ -20,7 +19,7 @@ namespace ChickenBoo
 
         public const string PluginGUID = "com.zarboz.chickenboo";
         public const string PluginName = "ChickenBoo";
-        public const string PluginVersion = "0.0.4";
+        public const string PluginVersion = "0.0.7";
         public static CustomLocalization Localization = LocalizationManager.Instance.GetLocalization();
         internal RandomEggLayer _eggLayer;
         internal static Harmony _harmony;
@@ -169,8 +168,9 @@ namespace ChickenBoo
                     }
                 }
             });
+            GrilledChickenItem = new CustomItem(GrilledChicken, true);
 
-            PrefabManager.Instance.AddPrefab(GrilledChicken);
+            ItemManager.Instance.AddItem(GrilledChickenItem);
             ItemManager.Instance.AddItem(FriedEggItem);
             ItemManager.Instance.AddItem(BoiledEggItem);
             CookingStationConversion();
@@ -183,7 +183,7 @@ namespace ChickenBoo
                 Station = "piece_cookingstation_iron",
                 FromItem = "raw_chicken",
                 ToItem = "cooked_chicken",
-                CookTime = 2f
+                CookTime = 15f
             });
 
             ItemManager.Instance.AddItemConversion(ironcovertor);
@@ -199,7 +199,8 @@ namespace ChickenBoo
                 RepairStation = "piece_workbench",
                 Requirements = new RequirementConfig[]
                 {
-                    new RequirementConfig { Amount = 1, Item = "Wood", Recover = true, AmountPerLevel = 1 }
+                    new RequirementConfig { Amount = 1, Item = "Bronze", Recover = true, AmountPerLevel = 1 },
+                    new RequirementConfig { Amount = 1, Item = "LeatherScraps", Recover = true, AmountPerLevel = 1}
                 }
             });
             ItemManager.Instance.AddItem(CI);
@@ -213,7 +214,7 @@ namespace ChickenBoo
                 RepairStation = "piece_workbench",
                 Requirements = new RequirementConfig[]
                 {
-                    new RequirementConfig { Amount = 1, Item = "Wood", Recover = true, AmountPerLevel = 1 }
+                    new RequirementConfig { Amount = 5, Item = "LeatherScraps", Recover = true, AmountPerLevel = 1 }
                 }
             });
             ItemManager.Instance.AddItem(somb);
@@ -280,14 +281,14 @@ namespace ChickenBoo
         [HarmonyPatch(typeof(Tameable), nameof(Tameable.Interact))]
         public static class InteractPatch
         {
-            public static void Prefix(Tameable __instance)
+            public static bool Prefix(Tameable __instance)
             {
                 if (__instance.gameObject.GetComponent<RandomEggLayer>() != null)
                 {
                     if (Input.GetKey(KeyCode.LeftAlt))
                     {
                         if(__instance.gameObject.GetComponent<RandomEggLayer>()._helmetMounter.HelmetMounted)
-                            return;
+                            return false;
                         var userinv = Player.m_localPlayer.GetInventory();
                         ItemDrop.ItemData tmphat = null;
                         foreach (var item in userinv.m_inventory)
@@ -306,12 +307,13 @@ namespace ChickenBoo
                             hm.HelmetMounted = true;
                             ZInput.ResetButtonStatus("Use");
                         }
+                        return false;
                     }
 
                     if (Input.GetKey(KeyCode.LeftControl))
                     {
                         if(__instance.gameObject.GetComponent<RandomEggLayer>()._helmetMounter.HelmetMounted)
-                                return;
+                                return false;
                         var userinv = Player.m_localPlayer.GetInventory();
                         ItemDrop.ItemData tmphat = null;
                         foreach (var item in userinv.m_inventory)
@@ -332,10 +334,12 @@ namespace ChickenBoo
                             hm.HelmetMounted = true;
                             ZInput.ResetButtonStatus("Use");
                         }
-                       
+                        return false;
                         
                     }
                 }
+
+                return true;
             }
         }
 
