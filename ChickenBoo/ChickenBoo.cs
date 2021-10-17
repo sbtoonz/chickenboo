@@ -136,11 +136,6 @@ namespace ChickenBoo
             var FriedEgg = assetBundle.LoadAsset<GameObject>("fried_egg");
             var BoiledEgg = assetBundle.LoadAsset<GameObject>("boiled_egg");
             
-            GrilledChickenItem = new CustomItem(GrilledChicken, true, new ItemConfig
-            {
-                Amount = 1,
-                Description = "Grilled Chicken Meat",
-            });
 
             FriedEggItem = new CustomItem(FriedEgg, true, new ItemConfig
             {
@@ -175,10 +170,7 @@ namespace ChickenBoo
                 }
             });
 
-
-
-
-            ItemManager.Instance.AddItem(GrilledChickenItem);
+            PrefabManager.Instance.AddPrefab(GrilledChicken);
             ItemManager.Instance.AddItem(FriedEggItem);
             ItemManager.Instance.AddItem(BoiledEggItem);
             CookingStationConversion();
@@ -288,7 +280,7 @@ namespace ChickenBoo
         [HarmonyPatch(typeof(Tameable), nameof(Tameable.Interact))]
         public static class InteractPatch
         {
-            public static void Postfix(Tameable __instance)
+            public static void Prefix(Tameable __instance)
             {
                 if (__instance.gameObject.GetComponent<RandomEggLayer>() != null)
                 {
@@ -296,60 +288,52 @@ namespace ChickenBoo
                     {
                         if(__instance.gameObject.GetComponent<RandomEggLayer>()._helmetMounter.HelmetMounted)
                             return;
-                        try
+                        var userinv = Player.m_localPlayer.GetInventory();
+                        ItemDrop.ItemData tmphat = null;
+                        foreach (var item in userinv.m_inventory)
                         {
-                            var userinv = Player.m_localPlayer.GetInventory();
-                            foreach (var item in userinv.m_inventory)
+                            if (item.m_shared.m_name == "$chicken_hat")
                             {
-                                if (item.m_shared.m_name == "$chicken_hat")
-                                {
-                                    var tmphat = userinv.GetItem(item.m_shared.m_name);
-                                    if(userinv.RemoveOneItem(tmphat))
-                                    {
-                                        var hm = __instance.gameObject.GetComponent<RandomEggLayer>()._helmetMounter;
-                                        hm.HelmetObject.SetActive(true);
-                                        var znv = __instance.GetComponent<ZNetView>();
-                                        znv.m_zdo.Set("$chicken_hat", true);
-                                        hm.HelmetMounted = true;
-                                    }
-
-                                }
+                                tmphat = userinv.GetItem("$chicken_hat");
                             }
                         }
-                        catch (Exception e)
+                        if(userinv.RemoveOneItem(tmphat))
                         {
-                            
+                            var hm = __instance.gameObject.GetComponent<RandomEggLayer>()._helmetMounter;
+                            hm.HelmetObject.SetActive(true);
+                            var znv = __instance.GetComponent<ZNetView>();
+                            znv.m_zdo.Set("$chicken_hat", true);
+                            hm.HelmetMounted = true;
+                            ZInput.ResetButtonStatus("Use");
                         }
-                        
                     }
 
                     if (Input.GetKey(KeyCode.LeftControl))
                     {
-                        try
-                        {
-                            if(__instance.gameObject.GetComponent<RandomEggLayer>()._helmetMounter.HelmetMounted)
+                        if(__instance.gameObject.GetComponent<RandomEggLayer>()._helmetMounter.HelmetMounted)
                                 return;
-                            var userinv = Player.m_localPlayer.GetInventory();
-                            foreach (var item in userinv.m_inventory)
-                            {
-                                if (item.m_shared.m_name == "$chicken_sombrero")
-                                {
-                                    var tmphat = userinv.GetItem(item.m_shared.m_name);
-                                    if(userinv.RemoveOneItem(tmphat))
-                                    {
-                                        var hm = __instance.gameObject.GetComponent<RandomEggLayer>()._helmetMounter;
-                                        hm.GravesSombrero.SetActive(true);
-                                        var znv = __instance.GetComponent<ZNetView>();
-                                        znv.m_zdo.Set("$chicken_sombrero", true);
-                                        hm.HelmetMounted = true;
-                                    }
-
-                                }
-                            }
-                        }
-                        catch (Exception e)
+                        var userinv = Player.m_localPlayer.GetInventory();
+                        ItemDrop.ItemData tmphat = null;
+                        foreach (var item in userinv.m_inventory)
                         {
+                            if (item.m_shared.m_name == "$chicken_sombrero")
+                            {
+                                tmphat = userinv.GetItem("$chicken_sombrero");
+                            }
+                            
                         }
+                        
+                        if (userinv.RemoveOneItem(tmphat))
+                        {
+                            var hm = __instance.gameObject.GetComponent<RandomEggLayer>()._helmetMounter;
+                            hm.GravesSombrero.SetActive(true);
+                            var znv = __instance.GetComponent<ZNetView>();
+                            znv.m_zdo.Set("$chicken_sombrero", true);
+                            hm.HelmetMounted = true;
+                            ZInput.ResetButtonStatus("Use");
+                        }
+                       
+                        
                     }
                 }
             }
