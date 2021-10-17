@@ -30,7 +30,6 @@ public class RandomEggLayer : MonoBehaviour
             if (randValue < .45f) // 45% of the time
             {
                 // Do Egg Lay x 1
-                Debug.Log("I should be laying 1 egg");
                 Vector3 vector = Random.insideUnitSphere * 0.5f;
                 var itemDrop = (ItemDrop)Instantiate(EggObject, transform.position + transform.forward * 2f + Vector3.up + vector,
                     Quaternion.identity)?.GetComponent(typeof(ItemDrop));
@@ -41,7 +40,6 @@ public class RandomEggLayer : MonoBehaviour
             else if (randValue < .9f) // 45% of the time
             {
                 // Do Egg lay x 6
-                Debug.Log("I Should be laying 6 eggs");
                 Vector3 vector = Random.insideUnitSphere * 0.5f;
                 var itemDrop = (ItemDrop)Instantiate(EggObject, transform.position + transform.forward * 2f + Vector3.up + vector,
                     Quaternion.identity)?.GetComponent(typeof(ItemDrop));
@@ -52,7 +50,6 @@ public class RandomEggLayer : MonoBehaviour
             else // 10% of the time
             {
                 // Do Egg Lay x 12?
-                Debug.Log("I should be laying 12 eggs");
                 Vector3 vector = Random.insideUnitSphere * 0.5f;
                 var itemDrop = (ItemDrop)Instantiate(EggObject, transform.position + transform.forward * 2f + Vector3.up + vector,
                     Quaternion.identity)?.GetComponent(typeof(ItemDrop));

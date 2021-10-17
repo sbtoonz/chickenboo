@@ -118,35 +118,28 @@ namespace ChickenBoo
 
             var RawEgg = assetBundle.LoadAsset<GameObject>("raw_egg");
             var RawChicken = assetBundle.LoadAsset<GameObject>("raw_chicken");
+            
+
+            RawEggItem = new CustomItem(RawEgg, true);
+            ItemManager.Instance.AddItem(RawEggItem);
+
+            RawChickenItem = new CustomItem(RawChicken, true);
+            ItemManager.Instance.AddItem(RawChickenItem);
+
+            SetupStubbornFoods();
+            PrefabManager.OnVanillaPrefabsAvailable -= SetupFoods;
+        }
+
+        private void SetupStubbornFoods()
+        {
             var GrilledChicken = assetBundle.LoadAsset<GameObject>("cooked_chicken");
             var FriedEgg = assetBundle.LoadAsset<GameObject>("fried_egg");
             var BoiledEgg = assetBundle.LoadAsset<GameObject>("boiled_egg");
-
-            RawEggItem = new CustomItem(RawEgg, true, new ItemConfig
-            {
-                Amount = 1,
-                Description = "A raw egg",
-                Enabled = false
-            });
-            ItemManager.Instance.AddItem(RawEggItem);
-
-            RawChickenItem = new CustomItem(RawChicken, true, new ItemConfig
-            {
-                Amount = 1,
-                Description = "Raw chicken",
-                Enabled = false
-            });
-            ItemManager.Instance.AddItem(RawChickenItem);
-
+            
             GrilledChickenItem = new CustomItem(GrilledChicken, true, new ItemConfig
             {
                 Amount = 1,
                 Description = "Grilled Chicken Meat",
-                CraftingStation = "piece_cauldron",
-                Requirements = new RequirementConfig[]
-                {
-                    new RequirementConfig { Amount = 1, Item = "raw_chicken", Recover = false, AmountPerLevel = 1 }
-                }
             });
 
             FriedEggItem = new CustomItem(FriedEgg, true, new ItemConfig
@@ -188,8 +181,20 @@ namespace ChickenBoo
             ItemManager.Instance.AddItem(GrilledChickenItem);
             ItemManager.Instance.AddItem(FriedEggItem);
             ItemManager.Instance.AddItem(BoiledEggItem);
+            CookingStationConversion();
+        }
 
-            PrefabManager.OnVanillaPrefabsAvailable -= SetupFoods;
+        private void CookingStationConversion()
+        {
+            var ironcovertor = new CustomItemConversion(new CookingConversionConfig
+            {
+                Station = "piece_cookingstation_iron",
+                FromItem = "raw_chicken",
+                ToItem = "cooked_chicken",
+                CookTime = 2f
+            });
+
+            ItemManager.Instance.AddItemConversion(ironcovertor);
         }
 
         private void LoadHat()
@@ -271,8 +276,8 @@ namespace ChickenBoo
                 new AcceptableValueRange<int>(1, 1000),
                 new ConfigurationManagerAttributes { IsAdminOnly = true }));
 
-            FeatherChance = Config.Bind("Chicken", "Feather Drop Chance", 0.5f,
-                "This is a representation of percent chance in number format that feathers will drop from the chicken");
+            FeatherChance = Config.Bind("Chicken", "Feather Drop Chance", 0.5f,new ConfigDescription(
+                "This is a representation of percent chance in number format that feathers will drop from the chicken", null, new ConfigurationManagerAttributes { IsAdminOnly = true }));
 
         }
 
@@ -289,6 +294,8 @@ namespace ChickenBoo
                 {
                     if (Input.GetKey(KeyCode.LeftAlt))
                     {
+                        if(__instance.gameObject.GetComponent<RandomEggLayer>()._helmetMounter.HelmetMounted)
+                            return;
                         try
                         {
                             var userinv = Player.m_localPlayer.GetInventory();
@@ -320,6 +327,8 @@ namespace ChickenBoo
                     {
                         try
                         {
+                            if(__instance.gameObject.GetComponent<RandomEggLayer>()._helmetMounter.HelmetMounted)
+                                return;
                             var userinv = Player.m_localPlayer.GetInventory();
                             foreach (var item in userinv.m_inventory)
                             {
@@ -353,11 +362,11 @@ namespace ChickenBoo
         {
             public static void Postfix(ref string __result, Tameable __instance)
             {
-                if (__instance.gameObject.GetComponent<RandomEggLayer>() != null)
-                {
-                    if(!__instance.gameObject.GetComponent<RandomEggLayer>()._helmetMounter.HelmetMounted)
-                      __result +=  global::Localization.instance.Localize("\n[<b><color=yellow>L-Alt + $KEY_Use</color></b>] To Equip Viking Hat\n[<b><color=yellow>L-Ctrl + $KEY_Use</color></b>] To Equip Sombrero");
-                }
+                if (__instance.gameObject.GetComponent<RandomEggLayer>() == null) return;
+                if (!__instance.gameObject.GetComponent<Humanoid>().IsTamed()) return;
+                if (!__instance.gameObject.GetComponent<RandomEggLayer>()._helmetMounter.HelmetMounted)
+                    __result += global::Localization.instance.Localize(
+                        "\n[<b><color=yellow>L-Alt + $KEY_Use</color></b>] To Equip Viking Hat\n[<b><color=yellow>L-Ctrl + $KEY_Use</color></b>] To Equip Sombrero");
             }
         }
 
