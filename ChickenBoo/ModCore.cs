@@ -40,7 +40,7 @@ namespace ChickenBoo
         public static GameObject FriedEgg { get; internal set; }
         public static GameObject BoiledEgg { get; internal set; }
         internal static GameObject RawEgg { get; set; }
-        public GameObject RawChicken { get; set; }
+        public static GameObject RawChicken { get; set; }
 
         private static AssetBundle? assetBundle;
         

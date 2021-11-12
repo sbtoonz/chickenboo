@@ -30,28 +30,34 @@ namespace ChickenBoo
                 if (__instance.m_items.Count <= 0 || __instance.GetItemPrefab("Wood") == null) return;
                 ChickenBoo.LoadHats();
                 ChickenBoo.AddtoCharDrops();
+                __instance.m_items.Add(ChickenBoo.GrilledChicken);
+                __instance.m_items.Add(ChickenBoo.RawEgg);
+                __instance.m_items.Add(ChickenBoo.BoiledEgg);
+                __instance.m_items.Add(ChickenBoo.FriedEgg);
+                __instance.m_items.Add(ChickenBoo.RawChicken);
+                
                 __instance.m_items.Add(ChickenBoo.coolhat);
                 __instance.m_recipes.Add(ChickenBoo.vikinghatrecipe);
                 __instance.m_items.Add(ChickenBoo.sombrero);
                 __instance.m_recipes.Add(ChickenBoo.sombrerorecipe);
                 
-                var station1 = __instance.GetItemPrefab("piece_cookingstation");
+                var station1 = ZNetScene.instance.GetPrefab("piece_cookingstation");
                 var conversion1 = station1.GetComponent<CookingStation>();
                 conversion1.m_conversion.Add(
                     new()
                     {
-                        m_from = ZNetScene.instance.GetPrefab("raw_chicken").GetComponent<ItemDrop>(),
-                        m_to = ChickenBoo.GrilledChicken.GetComponent<ItemDrop>(),
+                        m_from = __instance.GetItemPrefab("raw_chicken").GetComponent<ItemDrop>(),
+                        m_to = __instance.GetItemPrefab("cooked_chicken").GetComponent<ItemDrop>(),
                         m_cookTime = 15f
                     });
 
-                var station2 = __instance.GetItemPrefab("");
+                var station2 = ZNetScene.instance.GetPrefab("piece_cookingstation_iron");
                 var conversion2 = station2.GetComponent<CookingStation>();
                 conversion2.m_conversion.Add(
                     new CookingStation.ItemConversion
                     {
-                        m_from = ZNetScene.instance.GetPrefab("raw_chicken").GetComponent<ItemDrop>(),
-                        m_to = ChickenBoo.GrilledChicken.GetComponent<ItemDrop>(),
+                        m_from = __instance.GetItemPrefab("raw_chicken").GetComponent<ItemDrop>(),
+                        m_to = __instance.GetItemPrefab("cooked_chicken").GetComponent<ItemDrop>(),
                         m_cookTime = 15f
                     });
             }
@@ -66,31 +72,37 @@ namespace ChickenBoo
                 if (__instance.m_items.Count <= 0 || __instance.GetItemPrefab("Wood") == null) return;
                 ChickenBoo.LoadHats();
                 ChickenBoo.AddtoCharDrops();
+                __instance.m_items.Add(ChickenBoo.GrilledChicken);
+                __instance.m_items.Add(ChickenBoo.RawEgg);
+                __instance.m_items.Add(ChickenBoo.BoiledEgg);
+                __instance.m_items.Add(ChickenBoo.FriedEgg);
+                __instance.m_items.Add(ChickenBoo.RawChicken);
+
                 __instance.m_items.Add(ChickenBoo.coolhat);
                 __instance.m_recipes.Add(ChickenBoo.vikinghatrecipe);
                 __instance.m_items.Add(ChickenBoo.sombrero);
                 __instance.m_recipes.Add(ChickenBoo.sombrerorecipe);
-
-
-                var station1 = __instance.GetItemPrefab("piece_cookingstation");
+                
+                var station1 = ZNetScene.instance.GetPrefab("piece_cookingstation");
                 var conversion1 = station1.GetComponent<CookingStation>();
                 conversion1.m_conversion.Add(
-                new()
+                    new()
                     {
-                        m_from = ZNetScene.instance.GetPrefab("raw_chicken").GetComponent<ItemDrop>(),
-                        m_to = ChickenBoo.GrilledChicken.GetComponent<ItemDrop>(),
+                        m_from = __instance.GetItemPrefab("raw_chicken").GetComponent<ItemDrop>(),
+                        m_to = __instance.GetItemPrefab("cooked_chicken").GetComponent<ItemDrop>(),
                         m_cookTime = 15f
                     });
 
-                var station2 = __instance.GetItemPrefab("");
+                var station2 = ZNetScene.instance.GetPrefab("piece_cookingstation_iron");
                 var conversion2 = station2.GetComponent<CookingStation>();
                 conversion2.m_conversion.Add(
                     new CookingStation.ItemConversion
                     {
-                        m_from = ZNetScene.instance.GetPrefab("raw_chicken").GetComponent<ItemDrop>(),
-                        m_to = ChickenBoo.GrilledChicken.GetComponent<ItemDrop>(),
+                        m_from = __instance.GetItemPrefab("raw_chicken").GetComponent<ItemDrop>(),
+                        m_to = __instance.GetItemPrefab("cooked_chicken").GetComponent<ItemDrop>(),
                         m_cookTime = 15f
                     });
+
             }
         }
         
@@ -222,5 +234,6 @@ namespace ChickenBoo
                 Localization.instance.AddWord("chicken_sombrero_descrip","El Pollo Loco");
             }
         }
+
     }
 }
