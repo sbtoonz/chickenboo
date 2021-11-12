@@ -194,6 +194,13 @@ namespace ChickenBoo
                 new ConfigDescription(
                     "This number is show as a decimal. It is interpreted as a percent so 1 = 100% and .25 = 25% chance etc"));
             
+            MaxSpawnedChickensInSpawner = Config.Bind("Chicken", "Max Spawned Chickens Per Spawner", 10,
+                new ConfigDescription("This is the max number of chickens per spawner that spawn system makes"));
+
+            SpawnThatswitch = Config.Bind("Chicken", "Spawn That", false,
+                new ConfigDescription(
+                    "Set this to true if you want to disable the spawners built into Chickenboo in favor of using another spawner such as spawnthat"));
+            
             ChickenName = config("Translations", "Chicken Name",
                 "Chicken", new ConfigDescription("This is the in game name for the chicken"));
 

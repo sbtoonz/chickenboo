@@ -119,7 +119,7 @@ namespace ChickenBoo
                     if (spawnData.m_prefab.name == "Boar")
                     {
                         var tmp = spawnData.Clone();
-                        tmp.m_prefab = ZNetScene.instance.GetPrefab("ChickenBoo");
+                        tmp.m_prefab = ChickenBoo.chiken;
                         tmp.m_name = "ChickenBoo";
                         tmp.m_spawnAtDay = true;
                         tmp.m_spawnAtNight = true;
@@ -134,7 +134,7 @@ namespace ChickenBoo
                     if (spawnData.m_prefab.name == "Greydwarf")
                     {
                         var tmp = spawnData.Clone();
-                        tmp.m_prefab = ZNetScene.instance.GetPrefab("ChickenBoo");
+                        tmp.m_prefab = ChickenBoo.chiken;
                         tmp.m_name = "ChickenBoo";
                         tmp.m_spawnChance = ChickenBoo.EncounterChanceBF.Value;
                         tmp.m_spawnAtDay = true;
@@ -149,7 +149,7 @@ namespace ChickenBoo
                     if (spawnData.m_prefab.name == "Goblin")
                     {
                         var tmp = spawnData.Clone();
-                        tmp.m_prefab = ZNetScene.instance.GetPrefab("ChickenBoo");
+                        tmp.m_prefab = ChickenBoo.chiken;
                         tmp.m_name = "ChickenBoo";
                         tmp.m_spawnChance = ChickenBoo.EncounterChancePlains.Value;
                         tmp.m_spawnAtDay = true;
