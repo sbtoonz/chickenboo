@@ -2,6 +2,7 @@
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
+using ServerSync;
 using UnityEngine;
 using static ChickenBoo.Utilities;
 
@@ -13,6 +14,7 @@ namespace ChickenBoo
         internal const string ModName = "ChickenBoo";
         internal const string ModVersion = "1.0";
         internal const string ModGUID = "com.zarboz.ChickenBoo";
+        public static ServerSync.ConfigSync configSync = new ServerSync.ConfigSync(ModGUID) { DisplayName = ModName, CurrentVersion = ModVersion };
         
         internal static ConfigEntry<float> MinimumSpawnTimeForEgg;
         internal static ConfigEntry<float> MaximumSpawnTimeForEgg;
@@ -25,6 +27,9 @@ namespace ChickenBoo
         private static ConfigEntry<float> EncounterChancePlains;
         private static ConfigEntry<int> MaxSpawnedChickensInSpawner;
         private static ConfigEntry<bool> SpawnThatswitch;
+        public static ConfigEntry<bool> serverConfigLocked;
+        
+        
         internal RandomEggLayer _eggLayer;
         internal static Harmony _harmony;
         public static GameObject chiken { get; internal set; }
@@ -41,6 +46,19 @@ namespace ChickenBoo
         
         internal static Recipe sombrerorecipe;
         internal static Recipe vikinghatrecipe;
+        
+        ConfigEntry<T> config<T>(string group, string name, T value, ConfigDescription description, bool synchronizedSetting = true)
+        {
+            ConfigEntry<T> configEntry = Config.Bind(group, name, value, description);
+
+            SyncedConfigEntry<T> syncedConfigEntry = configSync.AddConfigEntry(configEntry);
+            syncedConfigEntry.SynchronizedConfig = synchronizedSetting;
+
+            return configEntry;
+        }
+
+        ConfigEntry<T> config<T>(string group, string name, T value, string description, bool synchronizedSetting = true) => config(group, name, value, new ConfigDescription(description), synchronizedSetting);
+
         public void Awake()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
@@ -116,31 +134,34 @@ namespace ChickenBoo
         {
             Config.SaveOnConfigSet = true;
 
-            MinimumSpawnTimeForEgg = Config.Bind("Chicken", "Egg Spawn Time Min", 150f, new ConfigDescription(
+            serverConfigLocked = config("General", "Lock Configuration", false, "Lock Configuration");
+            configSync.AddLockingConfigEntry<bool>(serverConfigLocked);
+            
+            MinimumSpawnTimeForEgg = config("Chicken", "Egg Spawn Time Min", 150f, new ConfigDescription(
                 "This is the minimum random volume of time in the range of time to select",
                 new AcceptableValueRange<float>(15f, 1000f)));
 
 
-            MaximumSpawnTimeForEgg = Config.Bind("Chicken", "Egg Spawn Time Max", 450f, new ConfigDescription(
+            MaximumSpawnTimeForEgg = config("Chicken", "Egg Spawn Time Max", 450f, new ConfigDescription(
                 "This is the maximum random volume of time in the range of time to select",
                 new AcceptableValueRange<float>(15f, 1000f)));
 
 
-            SpawnVol1 = Config.Bind("Chicken", "Egg Spawn Count 1", 1, new ConfigDescription(
+            SpawnVol1 = config("Chicken", "Egg Spawn Count 1", 1, new ConfigDescription(
                 "This is the volume of eggs that will be laid when random selection chooses a value < .45 which in theory is 45% of the time",
                 new AcceptableValueRange<int>(1, 1000)));
 
 
-            SpawnVol2 = Config.Bind("Chicken", "Egg Spawn Count 2", 6, new ConfigDescription(
+            SpawnVol2 = config("Chicken", "Egg Spawn Count 2", 6, new ConfigDescription(
                 "This is the volume of eggs that will be laid when random selection chooses a value < .9 which in theory is 45% of the time",
                 new AcceptableValueRange<int>(1, 1000)));
 
 
-            SpawnVol3 = Config.Bind("Chicken", "Egg Spawn Count 3", 12, new ConfigDescription(
+            SpawnVol3 = config("Chicken", "Egg Spawn Count 3", 12, new ConfigDescription(
                 "This is the volume of eggs that will be laid the remaining 10% of the selection ranges",
                 new AcceptableValueRange<int>(1, 1000)));
 
-            FeatherChance = Config.Bind("Chicken", "Feather Drop Chance", 0.5f,new ConfigDescription(
+            FeatherChance = config("Chicken", "Feather Drop Chance", 0.5f,new ConfigDescription(
                 "This is a representation of percent chance in number format that feathers will drop from the chicken", null));
 
         }
