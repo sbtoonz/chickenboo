@@ -188,5 +188,27 @@ namespace ChickenBoo
                 }
             }
         }
+
+        [HarmonyPatch(typeof(Localization), nameof(Localization.Initialize))]
+        public static class LocalizationPatch
+        {
+            public static void Prefix(Localization __instance)
+            {
+                __instance.AddWord("enemy_chicken","Chicken");
+                __instance.AddWord("raw_egg","Raw Egg");
+                __instance.AddWord("raw_egg_descrip","A fresh egg from your chicken. Great for cooking");
+                __instance.AddWord("raw_chicken","Raw Chicken");
+                __instance.AddWord("raw_chicken_descrip","Raw chicken meat for cooking.");
+                __instance.AddWord("boiled_egg","A Boiled Egg");
+                __instance.AddWord("boiled_egg_descrip","A hard boiled egg, nutritious and delicious");
+                __instance.AddWord("fried_egg","Fried Egg");
+                __instance.AddWord("fried_egg_descrip","A fried egg for any time of day!");
+                __instance.AddWord("cooked_chicken","Grilled Chicken");
+                __instance.AddWord("cooked_chicken_descrip", "A nice grilled chicken leg");
+                __instance.AddWord("chicken_hat","Chicken Viking Hat");
+                __instance.AddWord("chicken_sombrero","A Sombrero for the chicken");
+                __instance.AddWord("chicken_sombrero_descrip","El Pollo Loco");
+            }
+        }
     }
 }
