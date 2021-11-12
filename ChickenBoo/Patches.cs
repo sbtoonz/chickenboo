@@ -11,7 +11,7 @@ namespace ChickenBoo
         {
             public static void Prefix(ZNetScene __instance)
             {
-                if (__instance.m_prefabs.Count <= 0 || __instance.GetPrefab("Wood") == null) return;
+                if (__instance.m_prefabs.Count <= 0 ) return;
                 
                 Utilities.AddtoZnet(ChickenBoo.chicklet, __instance);
                 Utilities.AddtoZnet(ChickenBoo.chiken, __instance);
@@ -29,6 +29,7 @@ namespace ChickenBoo
             {
                 if (__instance.m_items.Count <= 0 || __instance.GetItemPrefab("Wood") == null) return;
                 ChickenBoo.LoadHats();
+                ChickenBoo.AddtoCharDrops();
                 __instance.m_items.Add(ChickenBoo.coolhat);
                 __instance.m_recipes.Add(ChickenBoo.vikinghatrecipe);
                 __instance.m_items.Add(ChickenBoo.sombrero);
@@ -44,6 +45,7 @@ namespace ChickenBoo
             {
                 if (__instance.m_items.Count <= 0 || __instance.GetItemPrefab("Wood") == null) return;
                 ChickenBoo.LoadHats();
+                ChickenBoo.AddtoCharDrops();
                 __instance.m_items.Add(ChickenBoo.coolhat);
                 __instance.m_recipes.Add(ChickenBoo.vikinghatrecipe);
                 __instance.m_items.Add(ChickenBoo.sombrero);
@@ -62,7 +64,7 @@ namespace ChickenBoo
                     if (spawnData.m_prefab.name == "Boar")
                     {
                         var tmp = spawnData.Clone();
-                        tmp.m_prefab = null;//Todo: Fix this;
+                        tmp.m_prefab = ChickenBoo.chiken;
                         tmp.m_name = "ChickenBoo";
                         tmp.m_spawnAtDay = true;
                         tmp.m_spawnAtNight = true;

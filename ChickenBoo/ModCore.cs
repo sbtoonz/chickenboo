@@ -10,9 +10,9 @@ namespace ChickenBoo
     [BepInPlugin(ModGUID, ModName, ModVersion)]
     public class ChickenBoo : BaseUnityPlugin
     {
-        private const string ModName = "ChickenBoo";
-        private const string ModVersion = "1.0";
-        private const string ModGUID = "com.zarboz.ChickenBoo";
+        internal const string ModName = "ChickenBoo";
+        internal const string ModVersion = "1.0";
+        internal const string ModGUID = "com.zarboz.ChickenBoo";
         
         internal static ConfigEntry<float> MinimumSpawnTimeForEgg;
         internal static ConfigEntry<float> MaximumSpawnTimeForEgg;
@@ -62,7 +62,19 @@ namespace ChickenBoo
             RawChicken = assetBundle.LoadAsset<GameObject>("raw_chicken");
         }
 
-        
+        internal static void AddtoCharDrops()
+        {
+            var chardrop = chiken.GetComponent<CharacterDrop>();
+            chardrop.m_drops.Add(new CharacterDrop.Drop
+            {
+                m_prefab = ZNetScene.instance.GetPrefab("Feathers"),
+                m_chance = FeatherChance.Value,
+                m_amountMax = 6,
+                m_amountMin = 1,
+                m_levelMultiplier = true,
+                m_onePerPlayer = true
+            });
+        }
 
         internal static void LoadHats()
         {
