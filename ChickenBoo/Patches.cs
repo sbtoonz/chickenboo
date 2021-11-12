@@ -112,17 +112,52 @@ namespace ChickenBoo
             private static List<SpawnSystem.SpawnData> _spawnDatas = new List<SpawnSystem.SpawnData>();
             public static void Prefix(SpawnSystem __instance)
             {
+                if (ChickenBoo.SpawnThatswitch.Value)
+                    return;
                 foreach (var spawnData in __instance.m_spawners)
                 {
                     if (spawnData.m_prefab.name == "Boar")
                     {
                         var tmp = spawnData.Clone();
-                        tmp.m_prefab = ChickenBoo.chiken;
+                        tmp.m_prefab = ZNetScene.instance.GetPrefab("ChickenBoo");
                         tmp.m_name = "ChickenBoo";
                         tmp.m_spawnAtDay = true;
                         tmp.m_spawnAtNight = true;
-                        tmp.m_maxSpawned = 10;
+                        tmp.m_spawnChance = ChickenBoo.EncounterChanceMeadows.Value;
+                        tmp.m_maxSpawned = ChickenBoo.MaxSpawnedChickensInSpawner.Value;
                         tmp.m_enabled = true;
+                        tmp.m_inForest = true;
+                        tmp.m_biome = Heightmap.Biome.Meadows;
+                        _spawnDatas.Add(tmp);
+                    }
+
+                    if (spawnData.m_prefab.name == "Greydwarf")
+                    {
+                        var tmp = spawnData.Clone();
+                        tmp.m_prefab = ZNetScene.instance.GetPrefab("ChickenBoo");
+                        tmp.m_name = "ChickenBoo";
+                        tmp.m_spawnChance = ChickenBoo.EncounterChanceBF.Value;
+                        tmp.m_spawnAtDay = true;
+                        tmp.m_spawnAtNight = true;
+                        tmp.m_maxSpawned = ChickenBoo.MaxSpawnedChickensInSpawner.Value;
+                        tmp.m_enabled = true;
+                        tmp.m_inForest = true;
+                        tmp.m_biome = Heightmap.Biome.BlackForest;
+                        _spawnDatas.Add(tmp);
+                    }
+
+                    if (spawnData.m_prefab.name == "Goblin")
+                    {
+                        var tmp = spawnData.Clone();
+                        tmp.m_prefab = ZNetScene.instance.GetPrefab("ChickenBoo");
+                        tmp.m_name = "ChickenBoo";
+                        tmp.m_spawnChance = ChickenBoo.EncounterChancePlains.Value;
+                        tmp.m_spawnAtDay = true;
+                        tmp.m_spawnAtNight = true;
+                        tmp.m_maxSpawned = ChickenBoo.MaxSpawnedChickensInSpawner.Value;
+                        tmp.m_enabled = true;
+                        tmp.m_inForest = true;
+                        tmp.m_biome = Heightmap.Biome.Plains;
                         _spawnDatas.Add(tmp);
                     }
                 }
@@ -218,20 +253,20 @@ namespace ChickenBoo
         {
             public static void Prefix()
             {
-                Localization.instance.AddWord("enemy_chicken","Chicken");
-                Localization.instance.AddWord("raw_egg","Raw Egg");
-                Localization.instance.AddWord("raw_egg_descrip","A fresh egg from your chicken. Great for cooking");
-                Localization.instance.AddWord("raw_chicken","Raw Chicken");
-                Localization.instance.AddWord("raw_chicken_descrip","Raw chicken meat for cooking.");
-                Localization.instance.AddWord("boiled_egg","A Boiled Egg");
-                Localization.instance.AddWord("boiled_egg_descrip","A hard boiled egg, nutritious and delicious");
-                Localization.instance.AddWord("fried_egg","Fried Egg");
-                Localization.instance.AddWord("fried_egg_descrip","A fried egg for any time of day!");
-                Localization.instance.AddWord("cooked_chicken","Grilled Chicken");
-                Localization.instance.AddWord("cooked_chicken_descrip", "A nice grilled chicken leg");
-                Localization.instance.AddWord("chicken_hat","Chicken Viking Hat");
-                Localization.instance.AddWord("chicken_sombrero","A Sombrero for the chicken");
-                Localization.instance.AddWord("chicken_sombrero_descrip","El Pollo Loco");
+                Localization.instance.AddWord("enemy_chicken",ChickenBoo.ChickenName.Value);
+                Localization.instance.AddWord("raw_egg",ChickenBoo.RawEggName.Value);
+                Localization.instance.AddWord("raw_egg_descrip",ChickenBoo.RawEggDescription.Value);
+                Localization.instance.AddWord("raw_chicken",ChickenBoo.RawChickenTranslation.Value);
+                Localization.instance.AddWord("raw_chicken_descrip",ChickenBoo.RawChickenDescription.Value);
+                Localization.instance.AddWord("boiled_egg",ChickenBoo.BoiledEggName.Value);
+                Localization.instance.AddWord("boiled_egg_descrip",ChickenBoo.BoiledEggDescription.Value);
+                Localization.instance.AddWord("fried_egg",ChickenBoo.FriedEggName.Value);
+                Localization.instance.AddWord("fried_egg_descrip",ChickenBoo.FriedEggDescription.Value);
+                Localization.instance.AddWord("cooked_chicken",ChickenBoo.CookedChickenName.Value);
+                Localization.instance.AddWord("cooked_chicken_descrip", ChickenBoo.CookedChickenDescription.Value);
+                Localization.instance.AddWord("chicken_hat",ChickenBoo.ChickenHat.Value);
+                Localization.instance.AddWord("chicken_sombrero",ChickenBoo.Sombrero.Value);
+                Localization.instance.AddWord("chicken_sombrero_descrip",ChickenBoo.SombreroDescription.Value);
             }
         }
 

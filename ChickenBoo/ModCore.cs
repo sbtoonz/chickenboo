@@ -21,15 +21,33 @@ namespace ChickenBoo
         internal static ConfigEntry<int> SpawnVol1;
         internal static ConfigEntry<int> SpawnVol2;
         internal static ConfigEntry<int> SpawnVol3;
-        private static ConfigEntry<float> FeatherChance;
-        private static ConfigEntry<float> EncounterChanceMeadows;
-        private static ConfigEntry<float> EncounterChanceBF;
-        private static ConfigEntry<float> EncounterChancePlains;
-        private static ConfigEntry<int> MaxSpawnedChickensInSpawner;
-        private static ConfigEntry<bool> SpawnThatswitch;
-        public static ConfigEntry<bool> serverConfigLocked;
+        internal static ConfigEntry<float> FeatherChance;
+        internal static ConfigEntry<float> EncounterChanceMeadows;
+        internal static ConfigEntry<float> EncounterChanceBF;
+        internal static ConfigEntry<float> EncounterChancePlains;
+        internal static ConfigEntry<int> MaxSpawnedChickensInSpawner;
+        internal static ConfigEntry<bool> SpawnThatswitch;
+        internal static ConfigEntry<bool> serverConfigLocked;
         
-        
+        //translation configentries
+
+        public static ConfigEntry<string> ChickenName;
+        public static ConfigEntry<string> RawChickenTranslation;
+        public static ConfigEntry<string> RawChickenDescription;
+        public static ConfigEntry<string> RawEggName;
+        public static ConfigEntry<string> RawEggDescription;
+        public static ConfigEntry<string> FriedEggName;
+        public static ConfigEntry<string> FriedEggDescription;
+        public static ConfigEntry<string> BoiledEggName;
+        public static ConfigEntry<string> BoiledEggDescription;
+        public static ConfigEntry<string> CookedChickenName;
+        public static ConfigEntry<string> CookedChickenDescription;
+        public static ConfigEntry<string> ChickenHat;
+        public static ConfigEntry<string> ChickenHatDescription;
+        public static ConfigEntry<string> Sombrero;
+        public static ConfigEntry<string> SombreroDescription;
+
+
         internal RandomEggLayer _eggLayer;
         internal static Harmony _harmony;
         public static GameObject chiken { get; internal set; }
@@ -164,6 +182,50 @@ namespace ChickenBoo
             FeatherChance = config("Chicken", "Feather Drop Chance", 0.5f,new ConfigDescription(
                 "This is a representation of percent chance in number format that feathers will drop from the chicken", null));
 
+            EncounterChanceMeadows = Config.Bind("Chicken", "Encounter Chance Meadows", 0.25f,
+                new ConfigDescription(
+                    "This number is show as a decimal. It is interpreted as a percent so 1 = 100% and .25 = 25% chance etc"));
+            
+            EncounterChancePlains = Config.Bind("Chicken", "Encounter Chance Plains", 0.25f,
+                new ConfigDescription(
+                    "This number is show as a decimal. It is interpreted as a percent so 1 = 100% and .25 = 25% chance etc"));
+            
+            EncounterChanceBF = Config.Bind("Chicken", "Encounter Chance Black Forest", 0.25f,
+                new ConfigDescription(
+                    "This number is show as a decimal. It is interpreted as a percent so 1 = 100% and .25 = 25% chance etc"));
+            
+            ChickenName = config("Translations", "Chicken Name",
+                "Chicken", new ConfigDescription("This is the in game name for the chicken"));
+
+            RawEggName = config("Translations","Raw Egg Name", "Raw Egg", new ConfigDescription(""));
+            
+            RawEggDescription = config("Translations","Raw Egg Descrip","A fresh egg from your chicken. Great for cooking",new ConfigDescription(""));
+            
+            FriedEggName = config("Translations","Fried Egg Name","Fried Egg",new ConfigDescription(""));
+            
+            FriedEggDescription = config("Translations","","",new ConfigDescription(""));
+            
+            BoiledEggName = config("Translations","Fried Egg Description","A fried egg for any time of day!",new ConfigDescription(""));
+            
+            BoiledEggDescription = config("Translations","Boiled Egg Name","A Boiled Egg",new ConfigDescription(""));
+            
+            CookedChickenName = config("Translations","Grilled Chicken Name","Grilled Chicken",new ConfigDescription(""));
+            
+            CookedChickenDescription = config("Translations","Grilled Chicken Description","A nice grilled chicken leg",new ConfigDescription(""));
+            
+            ChickenHat = config("Translations","Viking Hat Name","Chicken Viking Hat",new ConfigDescription(""));
+            
+            ChickenHatDescription = config("Translations","Viking Hat description","Chicken Viking Hat",new ConfigDescription(""));
+            
+            Sombrero = config("Translations","Sombrero Name","A Sombrero for the chicken",new ConfigDescription(""));
+            
+            SombreroDescription = config("Translations","Sombrero Description","El Pollo Loco",new ConfigDescription(""));
+
+            RawChickenTranslation = config("Translations", "Raw Chicken Name", "Raw Chicken", new ConfigDescription(""));
+
+            RawChickenDescription =
+                config("Translations", "Raw Chicken Description", "Raw chicken meat for cooking.", new ConfigDescription(""));
         }
+         
     }
 }
