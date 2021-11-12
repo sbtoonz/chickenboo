@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
@@ -12,7 +13,7 @@ namespace ChickenBoo
     public class ChickenBoo : BaseUnityPlugin
     {
         internal const string ModName = "ChickenBoo";
-        internal const string ModVersion = "2.0.0";
+        internal const string ModVersion = "2.0.2";
         internal const string ModGUID = "com.zarboz.ChickenBoo";
         public static ServerSync.ConfigSync configSync = new ServerSync.ConfigSync(ModGUID) { DisplayName = ModName, CurrentVersion = ModVersion };
         
@@ -48,7 +49,7 @@ namespace ChickenBoo
         public static ConfigEntry<string> SombreroDescription;
 
 
-        internal RandomEggLayer _eggLayer;
+        internal static RandomEggLayer _eggLayer;
         internal static Harmony _harmony;
         public static GameObject chiken { get; internal set; }
         public static GameObject coolhat { get; internal set; }
@@ -148,7 +149,7 @@ namespace ChickenBoo
                     }
                 });
         }
-         private void SetupConfigs()
+        private void SetupConfigs()
         {
             Config.SaveOnConfigSet = true;
 
@@ -233,6 +234,13 @@ namespace ChickenBoo
             RawChickenDescription =
                 config("Translations", "Raw Chicken Description", "Raw chicken meat for cooking.", new ConfigDescription(""));
         }
-         
+
+        public static void SetupConsumables()
+        {
+            _eggLayer._monsterAI.m_consumeItems = new List<ItemDrop>
+            {
+                ObjectDB.instance.GetItemPrefab("Dandelion").GetComponent<ItemDrop>()
+            };
+        }
     }
 }

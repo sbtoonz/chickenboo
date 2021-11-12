@@ -57,5 +57,25 @@ namespace ChickenBoo
             scene.m_prefabs.Add(GO);
             scene.m_namedPrefabs.Add(hash, GO);
         }
+        
+        internal static ItemDrop ReturnItemDrop(GameObject gameObject)
+        {
+            var drop = gameObject.GetComponent<ItemDrop>();
+
+            return drop;
+        }
+        
+        internal static GameObject RetrieveGO(string name)
+        {
+            var fab = ObjectDB.instance.GetItemPrefab(name);
+            return fab;
+        }
+
+        internal static void AddToConsume(MonsterAI monsterAI, string Name, ObjectDB objectDB)
+        {
+            var tmp=objectDB.GetItemPrefab(Name);
+            var drop = tmp.GetComponent<ItemDrop>();
+            monsterAI.m_consumeItems.Add(drop);
+        }
     }
 }

@@ -11,8 +11,8 @@ namespace ChickenBoo
         {
             public static void Prefix(ZNetScene __instance)
             {
-                if (__instance.m_prefabs.Count <= 0 ) return;
-                
+                if (__instance.m_prefabs.Count <= 0) return;
+
                 Utilities.AddtoZnet(ChickenBoo.chicklet, __instance);
                 Utilities.AddtoZnet(ChickenBoo.chiken, __instance);
                 Utilities.AddtoZnet(ChickenBoo.GrilledChicken, __instance);
@@ -60,6 +60,15 @@ namespace ChickenBoo
                         m_to = __instance.GetItemPrefab("cooked_chicken").GetComponent<ItemDrop>(),
                         m_cookTime = 15f
                     });
+                
+                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "Dandelion", __instance);
+                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "Blueberries", __instance);
+                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "Raspberry", __instance);
+                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "Acorn", __instance);
+                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "OnionSeeds", __instance);
+                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "CarrotSeeds", __instance);
+                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "TurnipSeeds", __instance);
+                
             }
         }
 
@@ -102,7 +111,13 @@ namespace ChickenBoo
                         m_to = __instance.GetItemPrefab("cooked_chicken").GetComponent<ItemDrop>(),
                         m_cookTime = 15f
                     });
-
+                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "Dandelion", __instance);
+                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "Blueberries", __instance);
+                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "Raspberry", __instance);
+                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "Acorn", __instance);
+                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "OnionSeeds", __instance);
+                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "CarrotSeeds", __instance);
+                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "TurnipSeeds", __instance);
             }
         }
         
