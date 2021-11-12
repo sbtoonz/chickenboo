@@ -34,6 +34,26 @@ namespace ChickenBoo
                 __instance.m_recipes.Add(ChickenBoo.vikinghatrecipe);
                 __instance.m_items.Add(ChickenBoo.sombrero);
                 __instance.m_recipes.Add(ChickenBoo.sombrerorecipe);
+                
+                var station1 = __instance.GetItemPrefab("piece_cookingstation");
+                var conversion1 = station1.GetComponent<CookingStation>();
+                conversion1.m_conversion.Add(
+                    new()
+                    {
+                        m_from = ZNetScene.instance.GetPrefab("raw_chicken").GetComponent<ItemDrop>(),
+                        m_to = ChickenBoo.GrilledChicken.GetComponent<ItemDrop>(),
+                        m_cookTime = 15f
+                    });
+
+                var station2 = __instance.GetItemPrefab("");
+                var conversion2 = station2.GetComponent<CookingStation>();
+                conversion2.m_conversion.Add(
+                    new CookingStation.ItemConversion
+                    {
+                        m_from = ZNetScene.instance.GetPrefab("raw_chicken").GetComponent<ItemDrop>(),
+                        m_to = ChickenBoo.GrilledChicken.GetComponent<ItemDrop>(),
+                        m_cookTime = 15f
+                    });
             }
         }
 
@@ -50,6 +70,27 @@ namespace ChickenBoo
                 __instance.m_recipes.Add(ChickenBoo.vikinghatrecipe);
                 __instance.m_items.Add(ChickenBoo.sombrero);
                 __instance.m_recipes.Add(ChickenBoo.sombrerorecipe);
+
+
+                var station1 = __instance.GetItemPrefab("piece_cookingstation");
+                var conversion1 = station1.GetComponent<CookingStation>();
+                conversion1.m_conversion.Add(
+                new()
+                    {
+                        m_from = ZNetScene.instance.GetPrefab("raw_chicken").GetComponent<ItemDrop>(),
+                        m_to = ChickenBoo.GrilledChicken.GetComponent<ItemDrop>(),
+                        m_cookTime = 15f
+                    });
+
+                var station2 = __instance.GetItemPrefab("");
+                var conversion2 = station2.GetComponent<CookingStation>();
+                conversion2.m_conversion.Add(
+                    new CookingStation.ItemConversion
+                    {
+                        m_from = ZNetScene.instance.GetPrefab("raw_chicken").GetComponent<ItemDrop>(),
+                        m_to = ChickenBoo.GrilledChicken.GetComponent<ItemDrop>(),
+                        m_cookTime = 15f
+                    });
             }
         }
         
@@ -160,54 +201,25 @@ namespace ChickenBoo
             }
         }
 
-        [HarmonyPatch(typeof(CookingStation), nameof(CookingStation.Awake))]
-        public static class CookingStationPatch
-        {
-            public static void Prefix(CookingStation __instance)
-            {
-                switch (__instance.m_name)
-                {
-                    case "piece_cookingstation_iron":
-                        var tmp = __instance.m_conversion;
-                        tmp.Add(new CookingStation.ItemConversion
-                        {
-                           m_from = ZNetScene.instance.GetPrefab("raw_chicken").GetComponent<ItemDrop>(),
-                           m_to = ChickenBoo.GrilledChicken.GetComponent<ItemDrop>(),
-                           m_cookTime = 15f
-                        });
-                        break;
-                    case "piece_cookingstation":
-                        var tmp2 = __instance.m_conversion;
-                        tmp2.Add(new CookingStation.ItemConversion
-                        {
-                            m_from = ZNetScene.instance.GetPrefab("raw_chicken").GetComponent<ItemDrop>(),
-                            m_to = ChickenBoo.GrilledChicken.GetComponent<ItemDrop>(),
-                            m_cookTime = 15f 
-                        });
-                        break;
-                }
-            }
-        }
-
-        [HarmonyPatch(typeof(Localization), nameof(Localization.Initialize))]
+        [HarmonyPatch(typeof(Localize), nameof(Localize.Awake))]
         public static class LocalizationPatch
         {
-            public static void Prefix(Localization __instance)
+            public static void Prefix()
             {
-                __instance.AddWord("enemy_chicken","Chicken");
-                __instance.AddWord("raw_egg","Raw Egg");
-                __instance.AddWord("raw_egg_descrip","A fresh egg from your chicken. Great for cooking");
-                __instance.AddWord("raw_chicken","Raw Chicken");
-                __instance.AddWord("raw_chicken_descrip","Raw chicken meat for cooking.");
-                __instance.AddWord("boiled_egg","A Boiled Egg");
-                __instance.AddWord("boiled_egg_descrip","A hard boiled egg, nutritious and delicious");
-                __instance.AddWord("fried_egg","Fried Egg");
-                __instance.AddWord("fried_egg_descrip","A fried egg for any time of day!");
-                __instance.AddWord("cooked_chicken","Grilled Chicken");
-                __instance.AddWord("cooked_chicken_descrip", "A nice grilled chicken leg");
-                __instance.AddWord("chicken_hat","Chicken Viking Hat");
-                __instance.AddWord("chicken_sombrero","A Sombrero for the chicken");
-                __instance.AddWord("chicken_sombrero_descrip","El Pollo Loco");
+                Localization.instance.AddWord("enemy_chicken","Chicken");
+                Localization.instance.AddWord("raw_egg","Raw Egg");
+                Localization.instance.AddWord("raw_egg_descrip","A fresh egg from your chicken. Great for cooking");
+                Localization.instance.AddWord("raw_chicken","Raw Chicken");
+                Localization.instance.AddWord("raw_chicken_descrip","Raw chicken meat for cooking.");
+                Localization.instance.AddWord("boiled_egg","A Boiled Egg");
+                Localization.instance.AddWord("boiled_egg_descrip","A hard boiled egg, nutritious and delicious");
+                Localization.instance.AddWord("fried_egg","Fried Egg");
+                Localization.instance.AddWord("fried_egg_descrip","A fried egg for any time of day!");
+                Localization.instance.AddWord("cooked_chicken","Grilled Chicken");
+                Localization.instance.AddWord("cooked_chicken_descrip", "A nice grilled chicken leg");
+                Localization.instance.AddWord("chicken_hat","Chicken Viking Hat");
+                Localization.instance.AddWord("chicken_sombrero","A Sombrero for the chicken");
+                Localization.instance.AddWord("chicken_sombrero_descrip","El Pollo Loco");
             }
         }
     }
