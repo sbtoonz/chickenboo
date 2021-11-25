@@ -356,9 +356,6 @@
     <Target Name="AfterBuild">
     </Target>
     -->
-	 <Target Name="Copy" AfterTargets="Build">
-     <Exec Command="copy /Y &quot;$(TargetDir)$(AssemblyName).dll&quot; &quot;$(GamePath)\BepInEx\plugins\$(AssemblyName).dll&quot;" />
-	</Target>
 	 <Import Project="..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets')" />
 	 <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
 	   <PropertyGroup>
@@ -366,4 +363,7 @@
 	   </PropertyGroup>
 	   <Error Condition="!Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets'))" />
 	 </Target>
+	 <Target Name="Copy" AfterTargets="AfterBuild">
+     <Exec Command="copy /Y &quot;$(TargetDir)$(AssemblyName).dll&quot; &quot;$(GamePath)\BepInEx\plugins\$(AssemblyName).dll&quot;" />
+	</Target>
 </Project>
