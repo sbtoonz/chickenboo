@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
 using UnityEngine;
 
@@ -122,67 +123,64 @@ namespace ChickenBoo
         }
         
         [HarmonyPatch(typeof(SpawnSystem), nameof(SpawnSystem.Awake))]
-        public static class SpawnPatch
+        public class SpawnPatch
         {
-            private static List<SpawnSystem.SpawnData> _spawnDatas = new List<SpawnSystem.SpawnData>();
             public static void Prefix(SpawnSystem __instance)
             {
+                var _spawn = new List<SpawnSystem.SpawnData>();
                 if (ChickenBoo.SpawnThatswitch.Value)
                     return;
-                foreach (var spawner in __instance.m_spawnLists)
+                foreach (var spawnData in __instance.m_spawnLists.SelectMany(spawner => spawner.m_spawners))
                 {
-                    foreach (var spawnData in spawner.m_spawners)
+                    if (spawnData.m_prefab.name == "Boar")
                     {
-                        if (spawnData.m_prefab.name == "Boar")
-                        {
-                            var tmp = spawnData.Clone();
-                            tmp.m_prefab = ChickenBoo.chiken;
-                            tmp.m_name = "ChickenBoo";
-                            tmp.m_spawnAtDay = true;
-                            tmp.m_spawnAtNight = true;
-                            tmp.m_spawnChance = ChickenBoo.EncounterChanceMeadows.Value;
-                            tmp.m_maxSpawned = ChickenBoo.MaxSpawnedChickensInSpawner.Value;
-                            tmp.m_enabled = true;
-                            tmp.m_inForest = true;
-                            tmp.m_biome = Heightmap.Biome.Meadows;
-                            _spawnDatas.Add(tmp);
-                        }
+                        var tmp = spawnData.Clone();
+                        tmp.m_prefab = ChickenBoo.chiken;
+                        tmp.m_name = "ChickenBoo";
+                        tmp.m_spawnAtDay = true;
+                        tmp.m_spawnAtNight = true;
+                        tmp.m_spawnChance = ChickenBoo.EncounterChanceMeadows.Value;
+                        tmp.m_maxSpawned = ChickenBoo.MaxSpawnedChickensInSpawner.Value;
+                        tmp.m_enabled = true;
+                        tmp.m_inForest = true;
+                        tmp.m_biome = Heightmap.Biome.Meadows;
+                        _spawn.Add(tmp);
+                    }
 
-                        if (spawnData.m_prefab.name == "Greydwarf")
-                        {
-                            var tmp = spawnData.Clone();
-                            tmp.m_prefab = ChickenBoo.chiken;
-                            tmp.m_name = "ChickenBoo";
-                            tmp.m_spawnChance = ChickenBoo.EncounterChanceBF.Value;
-                            tmp.m_spawnAtDay = true;
-                            tmp.m_spawnAtNight = true;
-                            tmp.m_maxSpawned = ChickenBoo.MaxSpawnedChickensInSpawner.Value;
-                            tmp.m_enabled = true;
-                            tmp.m_inForest = true;
-                            tmp.m_biome = Heightmap.Biome.BlackForest;
-                            _spawnDatas.Add(tmp);
-                        }
+                    if (spawnData.m_prefab.name == "Greydwarf")
+                    {
+                        var tmp = spawnData.Clone();
+                        tmp.m_prefab = ChickenBoo.chiken;
+                        tmp.m_name = "ChickenBoo";
+                        tmp.m_spawnChance = ChickenBoo.EncounterChanceBF.Value;
+                        tmp.m_spawnAtDay = true;
+                        tmp.m_spawnAtNight = true;
+                        tmp.m_maxSpawned = ChickenBoo.MaxSpawnedChickensInSpawner.Value;
+                        tmp.m_enabled = true;
+                        tmp.m_inForest = true;
+                        tmp.m_biome = Heightmap.Biome.BlackForest;
+                        _spawn.Add(tmp);
+                    }
 
-                        if (spawnData.m_prefab.name == "Goblin")
-                        {
-                            var tmp = spawnData.Clone();
-                            tmp.m_prefab = ChickenBoo.chiken;
-                            tmp.m_name = "ChickenBoo";
-                            tmp.m_spawnChance = ChickenBoo.EncounterChancePlains.Value;
-                            tmp.m_spawnAtDay = true;
-                            tmp.m_spawnAtNight = true;
-                            tmp.m_maxSpawned = ChickenBoo.MaxSpawnedChickensInSpawner.Value;
-                            tmp.m_enabled = true;
-                            tmp.m_inForest = true;
-                            tmp.m_biome = Heightmap.Biome.Plains;
-                            _spawnDatas.Add(tmp);
-                        }
+                    if (spawnData.m_prefab.name == "Goblin")
+                    {
+                        var tmp = spawnData.Clone();
+                        tmp.m_prefab = ChickenBoo.chiken;
+                        tmp.m_name = "ChickenBoo";
+                        tmp.m_spawnChance = ChickenBoo.EncounterChancePlains.Value;
+                        tmp.m_spawnAtDay = true;
+                        tmp.m_spawnAtNight = true;
+                        tmp.m_maxSpawned = ChickenBoo.MaxSpawnedChickensInSpawner.Value;
+                        tmp.m_enabled = true;
+                        tmp.m_inForest = true;
+                        tmp.m_biome = Heightmap.Biome.Plains;
+                        _spawn.Add(tmp);
                     }
                 }
 
                 foreach (var spawner in __instance.m_spawnLists)
                 {
-                    foreach (var spawnData in _spawnDatas) spawner.m_spawners.Add(spawnData);
+                    foreach (var spawnData in _spawn) spawner.m_spawners.Add(spawnData);
                 }
 
             }
