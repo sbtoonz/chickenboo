@@ -13,10 +13,11 @@ namespace ChickenBoo
     public class ChickenBoo : BaseUnityPlugin
     {
         internal const string ModName = "ChickenBoo";
-        internal const string ModVersion = "2.0.4";
+        internal const string ModVersion = "2.0.8";
         internal const string ModGUID = "com.zarboz.ChickenBoo";
         public static ServerSync.ConfigSync configSync = new ServerSync.ConfigSync(ModGUID) { DisplayName = ModName, CurrentVersion = ModVersion };
-        
+
+        internal static ConfigEntry<bool> useRKEggs;
         internal static ConfigEntry<float> MinimumSpawnTimeForEgg;
         internal static ConfigEntry<float> MaximumSpawnTimeForEgg;
         internal static ConfigEntry<int> SpawnVol1;
@@ -155,8 +156,10 @@ namespace ChickenBoo
 
             serverConfigLocked = config("General", "Lock Configuration", false, "Lock Configuration");
             configSync.AddLockingConfigEntry<bool>(serverConfigLocked);
-            
-            MinimumSpawnTimeForEgg = config("Chicken", "Egg Spawn Time Min", 150f, new ConfigDescription(
+
+            useRKEggs = config("Chicken", "Use RK_Eggs from BoneAppetite", false,
+                "set this to true if you want to use the eggs from BoneAppetite instead of the ones that came with the mod");
+                MinimumSpawnTimeForEgg = config("Chicken", "Egg Spawn Time Min", 150f, new ConfigDescription(
                 "This is the minimum random volume of time in the range of time to select",
                 new AcceptableValueRange<float>(15f, 1000f)));
 
