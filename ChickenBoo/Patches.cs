@@ -24,8 +24,6 @@ namespace ChickenBoo
                 Utilities.AddtoZnet(ChickenBoo.RawChicken, __instance);
                 Utilities.AddtoZnet(ChickenBoo.FriedEgg, __instance);
                 Utilities.AddtoZnet(ChickenBoo.BoiledEgg, __instance);
-                if (__instance.GetPrefab("Wood") == null) return; 
-                ChickenBoo.LoadHats();
                 Utilities.AddtoZnet(ChickenBoo.coolhat, __instance);
                 Utilities.AddtoZnet(ChickenBoo.sombrero, __instance);
                 if (ChickenBoo.useRKEggs.Value) return;
@@ -55,7 +53,6 @@ namespace ChickenBoo
                 __instance.m_items.Add(ChickenBoo.BoiledEgg);
                 __instance.m_items.Add(ChickenBoo.FriedEgg);
                 __instance.m_items.Add(ChickenBoo.RawChicken);
-                
                 __instance.m_items.Add(ChickenBoo.coolhat);
                 __instance.m_recipes.Add(ChickenBoo.vikinghatrecipe);
                 __instance.m_items.Add(ChickenBoo.sombrero);

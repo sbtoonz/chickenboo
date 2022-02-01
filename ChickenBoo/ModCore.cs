@@ -99,6 +99,8 @@ namespace ChickenBoo
             BoiledEgg = assetBundle.LoadAsset<GameObject>("boiled_egg");
             RawEgg = assetBundle.LoadAsset<GameObject>("raw_egg");
             RawChicken = assetBundle.LoadAsset<GameObject>("raw_chicken");
+            coolhat = assetBundle.LoadAsset<GameObject>("helmet");
+            sombrero = assetBundle.LoadAsset<GameObject>("chickensombrero");
         }
 
         internal static void AddtoCharDrops()
@@ -117,7 +119,6 @@ namespace ChickenBoo
 
         internal static void LoadHats()
         {
-            coolhat = assetBundle.LoadAsset<GameObject>("helmet");
             vikinghatrecipe = RecipeMaker(1, coolhat.GetComponent<ItemDrop>(), Station("piece_workbench"),
                 Station("piece_workbench"), 0,
                 new Piece.Requirement[]
@@ -138,7 +139,6 @@ namespace ChickenBoo
                     }
                 });
 
-            sombrero = assetBundle.LoadAsset<GameObject>("chickensombrero");
             sombrerorecipe = RecipeMaker(1, sombrero.GetComponent<ItemDrop>(),
                 Station("piece_workbench"), Station("piece_workbench"), 0, new Piece.Requirement[]
                 {
@@ -150,11 +150,6 @@ namespace ChickenBoo
                         m_amountPerLevel = 0
                     }
                 });
-                if(ZNetScene.instance.GetPrefab(sombrero.name) == null)
-                {
-                    ZNetScene.instance.m_prefabs.Add(sombrero);
-                    ZNetScene.instance.m_prefabs.Add(coolhat);
-                }
         }
         private void SetupConfigs()
         {
