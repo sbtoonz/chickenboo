@@ -22,6 +22,7 @@ namespace ChickenBoo
                 Utilities.AddtoZnet(ChickenBoo.chiken, __instance);
                 Utilities.AddtoZnet(ChickenBoo.GrilledChicken, __instance);
                 Utilities.AddtoZnet(ChickenBoo.RawChicken, __instance);
+                Utilities.AddtoZnet(ChickenBoo.coolhat, __instance);
                 Utilities.AddtoZnet(ChickenBoo.FriedEgg, __instance);
                 Utilities.AddtoZnet(ChickenBoo.BoiledEgg, __instance);
                 if (ChickenBoo.useRKEggs.Value) return;
