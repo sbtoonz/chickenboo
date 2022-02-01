@@ -7,6 +7,10 @@ namespace ChickenBoo
 {
     public class Patches
     {
+        
+        private static Recipe RecipeFriedEgg;
+        private static Recipe RecipeBoiledEgg;
+        
         [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
         public static class ZnetAwakePatch
         {
@@ -19,6 +23,7 @@ namespace ChickenBoo
                 Utilities.AddtoZnet(ChickenBoo.GrilledChicken, __instance);
                 Utilities.AddtoZnet(ChickenBoo.FriedEgg, __instance);
                 Utilities.AddtoZnet(ChickenBoo.BoiledEgg, __instance);
+                if (ChickenBoo.useRKEggs.Value) return;
                 Utilities.AddtoZnet(ChickenBoo.RawEgg, __instance);
             }
         }
@@ -26,9 +31,18 @@ namespace ChickenBoo
         [HarmonyPatch(typeof(ObjectDB), nameof(ObjectDB.Awake))]
         public static class ObjectDBAwakePatch
         {
+
             public static void Prefix(ObjectDB __instance)
             {
                 if (__instance.m_items.Count <= 0 || __instance.GetItemPrefab("Wood") == null) return;
+                if (ChickenBoo.useRKEggs.Value)
+                {
+                    ChickenBoo.RK_Egg = __instance.GetItemPrefab("rk_egg");
+                    if (ChickenBoo.RK_Egg == null)
+                    {
+                        Debug.LogError("Failed to load RK_Eggs, Check your BA Install to use this option with ChickenBoo");
+                    }
+                }
                 ChickenBoo.LoadHats();
                 ChickenBoo.AddtoCharDrops();
                 __instance.m_items.Add(ChickenBoo.GrilledChicken);
@@ -70,37 +84,80 @@ namespace ChickenBoo
                 Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "CarrotSeeds", __instance);
                 Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "TurnipSeeds", __instance);
                 
-                var RecipeFriedEgg = Utilities.RecipeMaker(1, ChickenBoo.FriedEgg.GetComponent<ItemDrop>(),
-                    ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
-                    ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
-                    1,
-                    new Piece.Requirement[]
-                    {
-                        new Piece.Requirement
+                
+                if (ChickenBoo.useRKEggs.Value)
+                {
+                    RecipeFriedEgg = Utilities.RecipeMaker(1, ChickenBoo.FriedEgg.GetComponent<ItemDrop>(),
+                        ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
+                        ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
+                        1,
+                        new Piece.Requirement[]
                         {
-                            m_amount = 1,
-                            m_amountPerLevel = 0,
-                            m_recover = false,
-                            m_resItem = ChickenBoo.RawEgg.GetComponent<ItemDrop>()
-                        }
-                    });
+                            new Piece.Requirement
+                            {
+                                m_amount = 1,
+                                m_amountPerLevel = 0,
+                                m_recover = false,
+                                m_resItem = ChickenBoo.RK_Egg!.GetComponent<ItemDrop>()
+                            }
+                        }); 
+                }
+                else
+                {
+                    RecipeFriedEgg = Utilities.RecipeMaker(1, ChickenBoo.FriedEgg.GetComponent<ItemDrop>(),
+                        ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
+                        ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
+                        1,
+                        new Piece.Requirement[]
+                        {
+                            new Piece.Requirement
+                            {
+                                m_amount = 1,
+                                m_amountPerLevel = 0,
+                                m_recover = false,
+                                //if BA
+                                m_resItem = ChickenBoo.RawEgg.GetComponent<ItemDrop>()
+                            }
+                        }); 
+                }
+
+                if (ChickenBoo.useRKEggs.Value)
+                {
+                    RecipeBoiledEgg = Utilities.RecipeMaker(1, ChickenBoo.BoiledEgg.GetComponent<ItemDrop>(),
+                        ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
+                        ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
+                        1,
+                        new Piece.Requirement[]
+                        {
+                            new Piece.Requirement
+                            {
+                                m_amount = 1,
+                                m_amountPerLevel = 0,
+                                m_recover = false,
+                                //if BA
+                                m_resItem = ChickenBoo.RK_Egg.GetComponent<ItemDrop>()
+                            }
+                        });
+                }
+                else
+                {
+                    RecipeBoiledEgg = Utilities.RecipeMaker(1, ChickenBoo.BoiledEgg.GetComponent<ItemDrop>(),
+                        ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
+                        ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
+                        1,
+                        new Piece.Requirement[]
+                        {
+                            new Piece.Requirement
+                            {
+                                m_amount = 1,
+                                m_amountPerLevel = 0,
+                                m_recover = false,
+                                //if BA
+                                m_resItem = ChickenBoo.RawEgg.GetComponent<ItemDrop>()
+                            }
+                        });
+                }
                 __instance.m_recipes.Add(RecipeFriedEgg);
-                //Recipes for food
-                var RecipeBoiledEgg = Utilities.RecipeMaker(1, ChickenBoo.BoiledEgg.GetComponent<ItemDrop>(),
-                    ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
-                    ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
-                    1,
-                    new Piece.Requirement[]
-                    {
-                        new Piece.Requirement
-                        {
-                            m_amount = 1,
-                            m_amountPerLevel = 0,
-                            m_recover = false,
-                            m_resItem = ChickenBoo.RawEgg.GetComponent<ItemDrop>()
-                        }
-                    });
-               // __instance.m_recipes.Add(RecipeFriedEgg);
                 __instance.m_recipes.Add(RecipeBoiledEgg);
                 
             }
@@ -113,6 +170,14 @@ namespace ChickenBoo
             public static void Prefix(ObjectDB __instance)
             {
                 if (__instance.m_items.Count <= 0 || __instance.GetItemPrefab("Wood") == null) return;
+                if (ChickenBoo.useRKEggs.Value)
+                {
+                    ChickenBoo.RK_Egg = __instance.GetItemPrefab("rk_egg");
+                    if (ChickenBoo.RK_Egg == null)
+                    {
+                        Debug.LogError("Failed to load RK_Eggs, Check your BA Install to use this option with ChickenBoo");
+                    }
+                }
                 ChickenBoo.LoadHats();
                 ChickenBoo.AddtoCharDrops();
                 __instance.m_items.Add(ChickenBoo.GrilledChicken);
@@ -153,37 +218,78 @@ namespace ChickenBoo
                 Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "CarrotSeeds", __instance);
                 Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "TurnipSeeds", __instance);
                 
-                //Recipes for food
-                var RecipeFriedEgg = Utilities.RecipeMaker(1, ChickenBoo.FriedEgg.GetComponent<ItemDrop>(),
-                    ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
-                    ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
-                    1,
-                    new Piece.Requirement[]
-                    {
-                        new Piece.Requirement
+                if (ChickenBoo.useRKEggs.Value)
+                {
+                    RecipeFriedEgg = Utilities.RecipeMaker(1, ChickenBoo.FriedEgg.GetComponent<ItemDrop>(),
+                        ZNetScene.instance.GetPrefab("piece_cauldron").GetComponent<CraftingStation>(),
+                        ZNetScene.instance.GetPrefab("piece_cauldron").GetComponent<CraftingStation>(),
+                        1,
+                        new Piece.Requirement[]
                         {
-                            m_amount = 3,
-                            m_amountPerLevel = 0,
-                            m_recover = false,
-                            m_resItem = ChickenBoo.RawEgg.GetComponent<ItemDrop>()
-                        }
-                    });
-                __instance.m_recipes.Add(RecipeFriedEgg);
-                //Recipes for food
-                var RecipeBoiledEgg = Utilities.RecipeMaker(1, ChickenBoo.BoiledEgg.GetComponent<ItemDrop>(),
-                    ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
-                    ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
-                    1,
-                    new Piece.Requirement[]
-                    {
-                        new Piece.Requirement
+                            new Piece.Requirement
+                            {
+                                m_amount = 1,
+                                m_amountPerLevel = 0,
+                                m_recover = false,
+                                m_resItem = ChickenBoo.RK_Egg!.GetComponent<ItemDrop>()
+                            }
+                        }); 
+                }
+                else
+                {
+                    RecipeFriedEgg = Utilities.RecipeMaker(1, ChickenBoo.FriedEgg.GetComponent<ItemDrop>(),
+                        ZNetScene.instance.GetPrefab("piece_cauldron").GetComponent<CraftingStation>(),
+                        ZNetScene.instance.GetPrefab("piece_cauldron").GetComponent<CraftingStation>(),
+                        1,
+                        new Piece.Requirement[]
                         {
-                            m_amount = 1,
-                            m_amountPerLevel = 0,
-                            m_recover = false,
-                            m_resItem = ChickenBoo.RawEgg.GetComponent<ItemDrop>()
-                        }
-                    });
+                            new Piece.Requirement
+                            {
+                                m_amount = 1,
+                                m_amountPerLevel = 0,
+                                m_recover = false,
+                                //if BA
+                                m_resItem = ChickenBoo.RawEgg.GetComponent<ItemDrop>()
+                            }
+                        }); 
+                }
+
+                if (ChickenBoo.useRKEggs.Value)
+                {
+                    RecipeBoiledEgg = Utilities.RecipeMaker(1, ChickenBoo.BoiledEgg.GetComponent<ItemDrop>(),
+                        ZNetScene.instance.GetPrefab("piece_cauldron").GetComponent<CraftingStation>(),
+                        ZNetScene.instance.GetPrefab("piece_cauldron").GetComponent<CraftingStation>(),
+                        1,
+                        new Piece.Requirement[]
+                        {
+                            new Piece.Requirement
+                            {
+                                m_amount = 1,
+                                m_amountPerLevel = 0,
+                                m_recover = false,
+                                //if BA
+                                m_resItem = ChickenBoo.RK_Egg.GetComponent<ItemDrop>()
+                            }
+                        });
+                }
+                else
+                {
+                    RecipeBoiledEgg = Utilities.RecipeMaker(1, ChickenBoo.BoiledEgg.GetComponent<ItemDrop>(),
+                        ZNetScene.instance.GetPrefab("piece_cauldron").GetComponent<CraftingStation>(),
+                        ZNetScene.instance.GetPrefab("piece_cauldron").GetComponent<CraftingStation>(),
+                        1,
+                        new Piece.Requirement[]
+                        {
+                            new Piece.Requirement
+                            {
+                                m_amount = 1,
+                                m_amountPerLevel = 0,
+                                m_recover = false,
+                                //if BA
+                                m_resItem = ChickenBoo.RawEgg.GetComponent<ItemDrop>()
+                            }
+                        });
+                }
                 if(__instance.m_recipes.Count <= 0) return;
                 __instance.m_recipes.Add(RecipeFriedEgg);
                 __instance.m_recipes.Add(RecipeBoiledEgg);

@@ -12,7 +12,8 @@ public class RandomEggLayer : MonoBehaviour
 
     internal DropTable TestTable;
     internal DropTable.DropData testItem;
-    
+    private ItemDrop itemDrop;
+
     private void Awake()
     {
         _tameable = GetComponent<Tameable>();
@@ -55,9 +56,18 @@ public class RandomEggLayer : MonoBehaviour
             {
                 // Do Egg Lay x 1
                 Vector3 vector = Random.insideUnitSphere * 0.5f;
-                var itemDrop = (ItemDrop)Instantiate(EggObject,
-                    transform.position + transform.forward * 2f + Vector3.up + vector,
-                    Quaternion.identity)?.GetComponent(typeof(ItemDrop))!;
+                if (ChickenBoo.ChickenBoo.useRKEggs.Value)
+                {
+                    itemDrop = (ItemDrop)Instantiate(ChickenBoo.ChickenBoo.RK_Egg,
+                        transform.position + transform.forward * 2f + Vector3.up + vector,
+                        Quaternion.identity)?.GetComponent(typeof(ItemDrop))!; 
+                }
+                else
+                {
+                    itemDrop = (ItemDrop)Instantiate(EggObject,
+                        transform.position + transform.forward * 2f + Vector3.up + vector,
+                        Quaternion.identity)?.GetComponent(typeof(ItemDrop))!;
+                }
                 if (itemDrop == null || itemDrop.m_itemData == null) return;
                 itemDrop.m_itemData.m_stack = ChickenBoo.ChickenBoo.SpawnVol1.Value;
                 itemDrop.m_itemData.m_durability = itemDrop.m_itemData.GetMaxDurability();
@@ -68,9 +78,18 @@ public class RandomEggLayer : MonoBehaviour
             {
                 // Do Egg lay x 6
                 Vector3 vector = Random.insideUnitSphere * 0.5f;
-                var itemDrop = (ItemDrop)Instantiate(EggObject,
-                    transform.position + transform.forward * 2f + Vector3.up + vector,
-                    Quaternion.identity)?.GetComponent(typeof(ItemDrop))!;
+                if (ChickenBoo.ChickenBoo.useRKEggs.Value)
+                {
+                    itemDrop = (ItemDrop)Instantiate(ChickenBoo.ChickenBoo.RK_Egg,
+                        transform.position + transform.forward * 2f + Vector3.up + vector,
+                        Quaternion.identity)?.GetComponent(typeof(ItemDrop))!; 
+                }
+                else
+                {
+                    itemDrop = (ItemDrop)Instantiate(EggObject,
+                        transform.position + transform.forward * 2f + Vector3.up + vector,
+                        Quaternion.identity)?.GetComponent(typeof(ItemDrop))!;
+                }
                 if (itemDrop == null || itemDrop.m_itemData == null) return;
                 itemDrop.m_itemData.m_stack = ChickenBoo.ChickenBoo.SpawnVol2.Value;
                 itemDrop.m_itemData.m_durability = itemDrop.m_itemData.GetMaxDurability();
@@ -82,9 +101,18 @@ public class RandomEggLayer : MonoBehaviour
             {
                 // Do Egg Lay x 12?
                 Vector3 vector = Random.insideUnitSphere * 0.5f;
-                var itemDrop = (ItemDrop)Instantiate(EggObject,
-                    transform.position + transform.forward * 2f + Vector3.up + vector,
-                    Quaternion.identity)?.GetComponent(typeof(ItemDrop))!;
+                if (ChickenBoo.ChickenBoo.useRKEggs.Value)
+                {
+                    itemDrop = (ItemDrop)Instantiate(ChickenBoo.ChickenBoo.RK_Egg,
+                        transform.position + transform.forward * 2f + Vector3.up + vector,
+                        Quaternion.identity)?.GetComponent(typeof(ItemDrop))!; 
+                }
+                else
+                {
+                    itemDrop = (ItemDrop)Instantiate(EggObject,
+                        transform.position + transform.forward * 2f + Vector3.up + vector,
+                        Quaternion.identity)?.GetComponent(typeof(ItemDrop))!;
+                }
                 if (itemDrop == null || itemDrop.m_itemData == null) return;
                 itemDrop.m_itemData.m_stack = ChickenBoo.ChickenBoo.SpawnVol3.Value;
                 itemDrop.m_itemData.m_durability = itemDrop.m_itemData.GetMaxDurability();

@@ -13,7 +13,7 @@ namespace ChickenBoo
     public class ChickenBoo : BaseUnityPlugin
     {
         internal const string ModName = "ChickenBoo";
-        internal const string ModVersion = "2.0.8";
+        internal const string ModVersion = "2.0.9";
         internal const string ModGUID = "com.zarboz.ChickenBoo";
         public static ServerSync.ConfigSync configSync = new ServerSync.ConfigSync(ModGUID) { DisplayName = ModName, CurrentVersion = ModVersion };
 
@@ -61,6 +61,8 @@ namespace ChickenBoo
         public static GameObject BoiledEgg { get; internal set; }
         internal static GameObject RawEgg { get; set; }
         public static GameObject RawChicken { get; set; }
+        
+        internal static GameObject? RK_Egg { get; set; }
 
         private static AssetBundle? assetBundle;
         
@@ -210,13 +212,13 @@ namespace ChickenBoo
 
             RawEggName = config("Translations","Raw Egg Name", "Raw Egg", new ConfigDescription(""));
             
-            RawEggDescription = config("Translations","Raw Egg Descrip","A fresh egg from your chicken. Great for cooking",new ConfigDescription(""));
+            RawEggDescription = config("Translations","Raw Egg Description","A fresh egg from your chicken. Great for cooking",new ConfigDescription(""));
             
             FriedEggName = config("Translations","Fried Egg Name","Fried Egg",new ConfigDescription(""));
             
             FriedEggDescription = config("Translations","","",new ConfigDescription(""));
             
-            BoiledEggName = config("Translations","Fried Egg Description","A fried egg for any time of day!",new ConfigDescription(""));
+            BoiledEggName = config("Translations","Boiled Egg Description","A boiled egg for any time of day!",new ConfigDescription(""));
             
             BoiledEggDescription = config("Translations","Boiled Egg Name","A Boiled Egg",new ConfigDescription(""));
             
