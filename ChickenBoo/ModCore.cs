@@ -13,7 +13,7 @@ namespace ChickenBoo
     public class ChickenBoo : BaseUnityPlugin
     {
         internal const string ModName = "ChickenBoo";
-        internal const string ModVersion = "2.0.9";
+        internal const string ModVersion = "2.1.0";
         internal const string ModGUID = "com.zarboz.ChickenBoo";
         public static ServerSync.ConfigSync configSync = new ServerSync.ConfigSync(ModGUID) { DisplayName = ModName, CurrentVersion = ModVersion };
 
@@ -68,7 +68,6 @@ namespace ChickenBoo
         
         internal static Recipe sombrerorecipe;
         internal static Recipe vikinghatrecipe;
-        
         ConfigEntry<T> config<T>(string group, string name, T value, ConfigDescription description, bool synchronizedSetting = true)
         {
             ConfigEntry<T> configEntry = Config.Bind(group, name, value, description);
@@ -151,6 +150,11 @@ namespace ChickenBoo
                         m_amountPerLevel = 0
                     }
                 });
+                if(ZNetScene.instance.GetPrefab(sombrero.name) == null)
+                {
+                    ZNetScene.instance.m_prefabs.Add(sombrero);
+                    ZNetScene.instance.m_prefabs.Add(coolhat);
+                }
         }
         private void SetupConfigs()
         {
