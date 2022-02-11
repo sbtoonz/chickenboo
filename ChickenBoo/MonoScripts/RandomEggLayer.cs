@@ -128,7 +128,7 @@ public class RandomEggLayer : MonoBehaviour
         
             foreach (var collider in hitcolliders)
             {
-                if (collider.gameObject.name == "raw_egg") ;
+                if (collider.gameObject.name.StartsWith("raw_egg")) 
                 return false;
             }
             

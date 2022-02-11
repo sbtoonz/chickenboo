@@ -2,6 +2,7 @@
 using System.Reflection;
 using BepInEx;
 using BepInEx.Configuration;
+using CreatureManager;
 using HarmonyLib;
 using ServerSync;
 using UnityEngine;
@@ -87,6 +88,21 @@ namespace ChickenBoo
             harmony.PatchAll(assembly);
             LoadAssets();
             SetupConfigs();
+            var test = new Creature(chiken)
+            {
+                Biome = Heightmap.Biome.Meadows,
+                GroupSize = new Range(2,30),
+                CheckSpawnInterval = 100,
+                ConfigurationEnabled = true,
+                CanSpawn = true,
+                Maximum = 50,
+                ForestSpawn = Forest.Yes,
+                CanBeTamed = true,
+                CanHaveStars = true,
+               
+                
+            };
+            test.Localize().English("ChickenBoo");
         }
         
         private void LoadAssets()
@@ -101,6 +117,8 @@ namespace ChickenBoo
             RawChicken = assetBundle.LoadAsset<GameObject>("raw_chicken");
             coolhat = assetBundle.LoadAsset<GameObject>("helmet");
             sombrero = assetBundle.LoadAsset<GameObject>("chickensombrero");
+            
+
         }
 
         internal static void AddtoCharDrops()

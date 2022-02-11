@@ -70,6 +70,9 @@
     <Reference Include="BepInEx">
       <HintPath>$(GamePath)\BepInEx\core\BepInEx.dll</HintPath>
     </Reference>
+    <Reference Include="CreatureManager, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>Libs\CreatureManager.dll</HintPath>
+    </Reference>
     <Reference Include="ServerSync, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>Libs\ServerSync.dll</HintPath>
     </Reference>
@@ -344,7 +347,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ILRepack.targets" />
+    <Content Include="Libs\CreatureManager.dll" />
     <Content Include="Libs\ServerSync.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\Microsoft.Unity.Analyzers.1.12.0\analyzers\dotnet\cs\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
