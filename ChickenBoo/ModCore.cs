@@ -14,7 +14,7 @@ namespace ChickenBoo
     public class ChickenBoo : BaseUnityPlugin
     {
         internal const string ModName = "ChickenBoo";
-        internal const string ModVersion = "2.1.0";
+        internal const string ModVersion = "2.1.1";
         internal const string ModGUID = "com.zarboz.ChickenBoo";
         public static ServerSync.ConfigSync configSync = new ServerSync.ConfigSync(ModGUID) { DisplayName = ModName, CurrentVersion = ModVersion };
 
@@ -24,13 +24,8 @@ namespace ChickenBoo
         internal static ConfigEntry<int> SpawnVol1;
         internal static ConfigEntry<int> SpawnVol2;
         internal static ConfigEntry<int> SpawnVol3;
-        internal static ConfigEntry<float> FeatherChance;
-        internal static ConfigEntry<float> EncounterChanceMeadows;
-        internal static ConfigEntry<float> EncounterChanceBF;
-        internal static ConfigEntry<float> EncounterChancePlains;
-        internal static ConfigEntry<int> MaxSpawnedChickensInSpawner;
-        internal static ConfigEntry<bool> SpawnThatswitch;
-        internal static ConfigEntry<bool> serverConfigLocked;
+        private static ConfigEntry<float> FeatherChance;
+        private static ConfigEntry<bool> serverConfigLocked;
         
         //translation configentries
 
@@ -46,13 +41,14 @@ namespace ChickenBoo
         public static ConfigEntry<string> CookedChickenName;
         public static ConfigEntry<string> CookedChickenDescription;
         public static ConfigEntry<string> ChickenHat;
-        public static ConfigEntry<string> ChickenHatDescription;
+        private static ConfigEntry<string> ChickenHatDescription;
         public static ConfigEntry<string> Sombrero;
         public static ConfigEntry<string> SombreroDescription;
 
-
-        internal static RandomEggLayer _eggLayer;
-        internal static Harmony _harmony;
+#pragma warning disable CS0649
+        private static RandomEggLayer? _eggLayer;
+        internal static Harmony? _harmony;
+#pragma warning restore CS0649
         public static GameObject chiken { get; internal set; }
         public static GameObject coolhat { get; internal set; }
         public static GameObject sombrero { get; internal set; }
@@ -67,8 +63,8 @@ namespace ChickenBoo
 
         private static AssetBundle? assetBundle;
         
-        internal static Recipe sombrerorecipe;
-        internal static Recipe vikinghatrecipe;
+        internal static Recipe? sombrerorecipe;
+        internal static Recipe? vikinghatrecipe;
         ConfigEntry<T> config<T>(string group, string name, T value, ConfigDescription description, bool synchronizedSetting = true)
         {
             ConfigEntry<T> configEntry = Config.Bind(group, name, value, description);
@@ -88,36 +84,35 @@ namespace ChickenBoo
             harmony.PatchAll(assembly);
             LoadAssets();
             SetupConfigs();
-            var test = new Creature(chiken)
+            var test = new Creature("chickenboo", "ChickenBoo")
             {
                 Biome = Heightmap.Biome.Meadows,
-                GroupSize = new Range(2,30),
-                CheckSpawnInterval = 100,
-                ConfigurationEnabled = true,
+                SpawnChance = 50f,
+                GroupSize = new Range(2f, 3f),
+                CheckSpawnInterval = 1400,
                 CanSpawn = true,
-                Maximum = 50,
+                Maximum = 5,
                 ForestSpawn = Forest.Yes,
                 CanBeTamed = true,
                 CanHaveStars = true,
-               
-                
+                SpecificSpawnTime = SpawnTime.Day,
             };
             test.Localize().English("ChickenBoo");
+            chiken = test.Prefab;
         }
         
         private void LoadAssets()
         {
             assetBundle = LoadAssetBundle("chickenboo");
-            chiken = assetBundle.LoadAsset<GameObject>("ChickenBoo");
-            chicklet = assetBundle.LoadAsset<GameObject>("chicklet");
-            GrilledChicken = assetBundle.LoadAsset<GameObject>("cooked_chicken");
-            FriedEgg = assetBundle.LoadAsset<GameObject>("fried_egg");
-            BoiledEgg = assetBundle.LoadAsset<GameObject>("boiled_egg");
-            RawEgg = assetBundle.LoadAsset<GameObject>("raw_egg");
-            RawChicken = assetBundle.LoadAsset<GameObject>("raw_chicken");
-            coolhat = assetBundle.LoadAsset<GameObject>("helmet");
-            sombrero = assetBundle.LoadAsset<GameObject>("chickensombrero");
-            
+            chicklet = assetBundle?.LoadAsset<GameObject>("chicklet")!;
+            GrilledChicken = assetBundle?.LoadAsset<GameObject>("cooked_chicken")!;
+            FriedEgg = assetBundle?.LoadAsset<GameObject>("fried_egg")!;
+            BoiledEgg = assetBundle?.LoadAsset<GameObject>("boiled_egg")!;
+            RawEgg = assetBundle?.LoadAsset<GameObject>("raw_egg")!;
+            RawChicken = assetBundle?.LoadAsset<GameObject>("raw_chicken")!;
+            coolhat = assetBundle?.LoadAsset<GameObject>("helmet")!;
+            sombrero = assetBundle?.LoadAsset<GameObject>("chickensombrero")!;
+            assetBundle?.Unload(false);
 
         }
 
@@ -204,25 +199,6 @@ namespace ChickenBoo
 
             FeatherChance = config("Chicken", "Feather Drop Chance", 0.5f,new ConfigDescription(
                 "This is a representation of percent chance in number format that feathers will drop from the chicken", null));
-
-            EncounterChanceMeadows = Config.Bind("Chicken", "Encounter Chance Meadows", 0.25f,
-                new ConfigDescription(
-                    "This number is show as a decimal. It is interpreted as a percent so 1 = 100% and .25 = 25% chance etc"));
-            
-            EncounterChancePlains = Config.Bind("Chicken", "Encounter Chance Plains", 0.25f,
-                new ConfigDescription(
-                    "This number is show as a decimal. It is interpreted as a percent so 1 = 100% and .25 = 25% chance etc"));
-            
-            EncounterChanceBF = Config.Bind("Chicken", "Encounter Chance Black Forest", 0.25f,
-                new ConfigDescription(
-                    "This number is show as a decimal. It is interpreted as a percent so 1 = 100% and .25 = 25% chance etc"));
-            
-            MaxSpawnedChickensInSpawner = Config.Bind("Chicken", "Max Spawned Chickens Per Spawner", 10,
-                new ConfigDescription("This is the max number of chickens per spawner that spawn system makes"));
-
-            SpawnThatswitch = Config.Bind("Chicken", "Spawn That", false,
-                new ConfigDescription(
-                    "Set this to true if you want to disable the spawners built into Chickenboo in favor of using another spawner such as spawnthat"));
             
             ChickenName = config("Translations", "Chicken Name",
                 "Chicken", new ConfigDescription("This is the in game name for the chicken"));
@@ -259,7 +235,7 @@ namespace ChickenBoo
 
         public static void SetupConsumables()
         {
-            _eggLayer._monsterAI.m_consumeItems = new List<ItemDrop>
+            _eggLayer!._monsterAI.m_consumeItems = new List<ItemDrop>
             {
                 ObjectDB.instance.GetItemPrefab("Dandelion").GetComponent<ItemDrop>()
             };

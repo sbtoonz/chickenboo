@@ -343,7 +343,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Assets\chickenboo" />
+    <EmbeddedResource Include="assets\chickenboo" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ILRepack.targets" />
@@ -368,7 +368,10 @@
 	   </PropertyGroup>
 	   <Error Condition="!Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets'))" />
 	 </Target>
-	 <Target Name="Copy" AfterTargets="AfterBuild">
+	 <Target Name="Copy" AfterTargets="Build">
      <Exec Command="copy /Y &quot;$(TargetDir)$(AssemblyName).dll&quot; &quot;$(GamePath)\BepInEx\plugins\$(AssemblyName).dll&quot;" />
+	</Target>
+	 <Target Name="Copy_ThunderStore" AfterTargets="Build">
+     <Exec Command="copy /Y &quot;$(TargetDir)$(AssemblyName).dll&quot; &quot;..\ThunderStore_Release\plugins\$(AssemblyName).dll&quot;" />
 	</Target>
 </Project>

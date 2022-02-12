@@ -8,8 +8,8 @@ namespace ChickenBoo
     public class Patches
     {
         
-        private static Recipe RecipeFriedEgg;
-        private static Recipe RecipeBoiledEgg;
+        private static Recipe? _recipeFriedEgg;
+        private static Recipe? _recipeBoiledEgg;
         
         [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
         public static class ZnetAwakePatch
@@ -89,7 +89,7 @@ namespace ChickenBoo
                 
                 if (ChickenBoo.useRKEggs.Value)
                 {
-                    RecipeFriedEgg = Utilities.RecipeMaker(1, ChickenBoo.FriedEgg.GetComponent<ItemDrop>(),
+                    _recipeFriedEgg = Utilities.RecipeMaker(1, ChickenBoo.FriedEgg.GetComponent<ItemDrop>(),
                         ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
                         ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
                         1,
@@ -106,7 +106,7 @@ namespace ChickenBoo
                 }
                 else
                 {
-                    RecipeFriedEgg = Utilities.RecipeMaker(1, ChickenBoo.FriedEgg.GetComponent<ItemDrop>(),
+                    _recipeFriedEgg = Utilities.RecipeMaker(1, ChickenBoo.FriedEgg.GetComponent<ItemDrop>(),
                         ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
                         ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
                         1,
@@ -125,7 +125,7 @@ namespace ChickenBoo
 
                 if (ChickenBoo.useRKEggs.Value)
                 {
-                    RecipeBoiledEgg = Utilities.RecipeMaker(1, ChickenBoo.BoiledEgg.GetComponent<ItemDrop>(),
+                    _recipeBoiledEgg = Utilities.RecipeMaker(1, ChickenBoo.BoiledEgg.GetComponent<ItemDrop>(),
                         ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
                         ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
                         1,
@@ -137,13 +137,13 @@ namespace ChickenBoo
                                 m_amountPerLevel = 0,
                                 m_recover = false,
                                 //if BA
-                                m_resItem = ChickenBoo.RK_Egg.GetComponent<ItemDrop>()
+                                m_resItem = ChickenBoo.RK_Egg?.GetComponent<ItemDrop>()
                             }
                         });
                 }
                 else
                 {
-                    RecipeBoiledEgg = Utilities.RecipeMaker(1, ChickenBoo.BoiledEgg.GetComponent<ItemDrop>(),
+                    _recipeBoiledEgg = Utilities.RecipeMaker(1, ChickenBoo.BoiledEgg.GetComponent<ItemDrop>(),
                         ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
                         ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>(),
                         1,
@@ -159,8 +159,8 @@ namespace ChickenBoo
                             }
                         });
                 }
-                __instance.m_recipes.Add(RecipeFriedEgg);
-                __instance.m_recipes.Add(RecipeBoiledEgg);
+                __instance.m_recipes.Add(_recipeFriedEgg);
+                __instance.m_recipes.Add(_recipeBoiledEgg);
                 
             }
         }
@@ -222,7 +222,7 @@ namespace ChickenBoo
                 
                 if (ChickenBoo.useRKEggs.Value)
                 {
-                    RecipeFriedEgg = Utilities.RecipeMaker(1, ChickenBoo.FriedEgg.GetComponent<ItemDrop>(),
+                    _recipeFriedEgg = Utilities.RecipeMaker(1, ChickenBoo.FriedEgg.GetComponent<ItemDrop>(),
                         ZNetScene.instance.GetPrefab("piece_cauldron").GetComponent<CraftingStation>(),
                         ZNetScene.instance.GetPrefab("piece_cauldron").GetComponent<CraftingStation>(),
                         1,
@@ -239,7 +239,7 @@ namespace ChickenBoo
                 }
                 else
                 {
-                    RecipeFriedEgg = Utilities.RecipeMaker(1, ChickenBoo.FriedEgg.GetComponent<ItemDrop>(),
+                    _recipeFriedEgg = Utilities.RecipeMaker(1, ChickenBoo.FriedEgg.GetComponent<ItemDrop>(),
                         ZNetScene.instance.GetPrefab("piece_cauldron").GetComponent<CraftingStation>(),
                         ZNetScene.instance.GetPrefab("piece_cauldron").GetComponent<CraftingStation>(),
                         1,
@@ -258,7 +258,7 @@ namespace ChickenBoo
 
                 if (ChickenBoo.useRKEggs.Value)
                 {
-                    RecipeBoiledEgg = Utilities.RecipeMaker(1, ChickenBoo.BoiledEgg.GetComponent<ItemDrop>(),
+                    _recipeBoiledEgg = Utilities.RecipeMaker(1, ChickenBoo.BoiledEgg.GetComponent<ItemDrop>(),
                         ZNetScene.instance.GetPrefab("piece_cauldron").GetComponent<CraftingStation>(),
                         ZNetScene.instance.GetPrefab("piece_cauldron").GetComponent<CraftingStation>(),
                         1,
@@ -270,13 +270,13 @@ namespace ChickenBoo
                                 m_amountPerLevel = 0,
                                 m_recover = false,
                                 //if BA
-                                m_resItem = ChickenBoo.RK_Egg.GetComponent<ItemDrop>()
+                                m_resItem = ChickenBoo.RK_Egg?.GetComponent<ItemDrop>()
                             }
                         });
                 }
                 else
                 {
-                    RecipeBoiledEgg = Utilities.RecipeMaker(1, ChickenBoo.BoiledEgg.GetComponent<ItemDrop>(),
+                    _recipeBoiledEgg = Utilities.RecipeMaker(1, ChickenBoo.BoiledEgg.GetComponent<ItemDrop>(),
                         ZNetScene.instance.GetPrefab("piece_cauldron").GetComponent<CraftingStation>(),
                         ZNetScene.instance.GetPrefab("piece_cauldron").GetComponent<CraftingStation>(),
                         1,
@@ -293,8 +293,8 @@ namespace ChickenBoo
                         });
                 }
                 if(__instance.m_recipes.Count <= 0) return;
-                __instance.m_recipes.Add(RecipeFriedEgg);
-                __instance.m_recipes.Add(RecipeBoiledEgg);
+                __instance.m_recipes.Add(_recipeFriedEgg);
+                __instance.m_recipes.Add(_recipeBoiledEgg);
             }
         }
 
@@ -310,7 +310,7 @@ namespace ChickenBoo
                         if(__instance.gameObject.GetComponent<RandomEggLayer>()._helmetMounter.HelmetMounted)
                             return false;
                         var userinv = Player.m_localPlayer.GetInventory();
-                        ItemDrop.ItemData tmphat = null;
+                        ItemDrop.ItemData? tmphat = null;
                         foreach (var item in userinv.m_inventory)
                         {
                             if (item.m_shared.m_name == "$chicken_hat")
@@ -335,7 +335,7 @@ namespace ChickenBoo
                         if(__instance.gameObject.GetComponent<RandomEggLayer>()._helmetMounter.HelmetMounted)
                                 return false;
                         var userinv = Player.m_localPlayer.GetInventory();
-                        ItemDrop.ItemData tmphat = null;
+                        ItemDrop.ItemData? tmphat = null;
                         foreach (var item in userinv.m_inventory)
                         {
                             if (item.m_shared.m_name == "$chicken_sombrero")

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,32 +12,13 @@ public class RandomEggLayer : MonoBehaviour
     [SerializeField] internal GameObject EggObject;
     [SerializeField] internal HelmetMounter _helmetMounter;
 
-    internal DropTable TestTable;
-    internal DropTable.DropData testItem;
-    private ItemDrop itemDrop;
+    private ItemDrop? itemDrop;
 
     private void Awake()
     {
         _tameable = GetComponent<Tameable>();
         _monsterAI = GetComponent<MonsterAI>();
         _humanoid = GetComponent<Humanoid>();
-        testItem = new DropTable.DropData
-        {
-            m_item = ChickenBoo.ChickenBoo.RawEgg,
-            m_weight = 0.15f,
-            m_stackMax = 12,
-            m_stackMin = 1
-        };
-        TestTable = new DropTable
-        {
-            m_dropChance = 0.15f,
-            m_dropMax = ChickenBoo.ChickenBoo.SpawnVol1.Value,
-            m_dropMin = ChickenBoo.ChickenBoo.SpawnVol2.Value,
-            m_drops = new List<DropTable.DropData>
-            {
-                testItem,
-            }
-        };
     }
     
     private void OnEnable()
@@ -125,14 +108,8 @@ public class RandomEggLayer : MonoBehaviour
     private bool ShouldLayEgg()
     {
         var hitcolliders = Physics.OverlapSphere(transform.position, 15);
-        
-            foreach (var collider in hitcolliders)
-            {
-                if (collider.gameObject.name.StartsWith("raw_egg")) 
-                return false;
-            }
-            
-            return true;
+
+        return hitcolliders.All(collider => !collider.gameObject.name.StartsWith("raw_egg", StringComparison.Ordinal));
     }
     
 }

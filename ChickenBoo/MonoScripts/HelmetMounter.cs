@@ -3,7 +3,9 @@ using UnityEngine;
 
 public class HelmetMounter : MonoBehaviour
 {
+#pragma warning disable CS0414
     private string m_hoverText = "Equip Helmet?";
+#pragma warning restore CS0414
     [SerializeField] internal Transform HelmetMountPoint;
     [SerializeField] internal GameObject HelmetObject;
     [SerializeField] internal ZNetView _zNetView;
