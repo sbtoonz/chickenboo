@@ -2,7 +2,7 @@
  "name": "ChickenBoo",
   "author": "OdinPlus",
   "description": "ChickenBoo invades Valheim!",
-  "version_number": "2.1.1",
+  "version_number": "2.1.3",
   "website_url": "https://github.com/sbtoonz/chickenboo",
   "dependencies": [
     "denikson-BepInExPack_Valheim-5.4.1900"

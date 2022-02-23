@@ -113,6 +113,11 @@
 ### V2.1.1
 * Changed to CreatureManager for the spawning of the chicken 
 
+### V2.1.2
+* Hotfix for issue with previous upload
+
+### V2.1.3
+* Fix chicken consumables now that I am using creaturemanager
 
 <h2>  Install Notes: </h2>
 

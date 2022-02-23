@@ -39,14 +39,10 @@ public class HelmetMounter : MonoBehaviour
 
     private void OnEnable()
     {
-        switch (HelmetObject.activeInHierarchy || GravesSombrero.activeInHierarchy)
+        HelmetMounted = (HelmetObject.activeInHierarchy || GravesSombrero.activeInHierarchy) switch
         {
-            case false:
-                HelmetMounted = false;
-                break;
-            case true:
-                HelmetMounted = true;
-                break;
-        }
+            false => false,
+            true => true
+        };
     }
 }

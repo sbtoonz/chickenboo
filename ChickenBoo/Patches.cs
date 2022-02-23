@@ -19,7 +19,6 @@ namespace ChickenBoo
                 if (__instance.m_prefabs.Count <= 0) return;
 
                 Utilities.AddtoZnet(ChickenBoo.chicklet, __instance);
-                Utilities.AddtoZnet(ChickenBoo.chiken, __instance);
                 Utilities.AddtoZnet(ChickenBoo.GrilledChicken, __instance);
                 Utilities.AddtoZnet(ChickenBoo.RawChicken, __instance);
                 Utilities.AddtoZnet(ChickenBoo.FriedEgg, __instance);
@@ -32,6 +31,7 @@ namespace ChickenBoo
         }
 
         [HarmonyPatch(typeof(ObjectDB), nameof(ObjectDB.Awake))]
+        [HarmonyPriority(Priority.Last)]
         public static class ObjectDBAwakePatch
         {
 
@@ -77,16 +77,7 @@ namespace ChickenBoo
                         m_to = __instance.GetItemPrefab("cooked_chicken").GetComponent<ItemDrop>(),
                         m_cookTime = 15f
                     });
-                
-                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "Dandelion", __instance);
-                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "Blueberries", __instance);
-                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "Raspberry", __instance);
-                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "Acorn", __instance);
-                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "OnionSeeds", __instance);
-                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "CarrotSeeds", __instance);
-                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "TurnipSeeds", __instance);
-                
-                
+
                 if (ChickenBoo.useRKEggs.Value)
                 {
                     _recipeFriedEgg = Utilities.RecipeMaker(1, ChickenBoo.FriedEgg.GetComponent<ItemDrop>(),
@@ -165,7 +156,7 @@ namespace ChickenBoo
             }
         }
 
-        [HarmonyPriority(Priority.HigherThanNormal)]
+        [HarmonyPriority(Priority.Last)]
         [HarmonyPatch(typeof(ObjectDB), nameof(ObjectDB.CopyOtherDB))]
         public static class CopyOtherDBPatch
         {
@@ -212,13 +203,6 @@ namespace ChickenBoo
                         m_to = __instance.GetItemPrefab("cooked_chicken").GetComponent<ItemDrop>(),
                         m_cookTime = 15f
                     });
-                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "Dandelion", __instance);
-                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "Blueberries", __instance);
-                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "Raspberry", __instance);
-                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "Acorn", __instance);
-                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "OnionSeeds", __instance);
-                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "CarrotSeeds", __instance);
-                Utilities.AddToConsume(ChickenBoo.chiken.GetComponent<MonsterAI>(), "TurnipSeeds", __instance);
                 
                 if (ChickenBoo.useRKEggs.Value)
                 {

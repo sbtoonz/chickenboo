@@ -14,7 +14,7 @@ namespace ChickenBoo
     public class ChickenBoo : BaseUnityPlugin
     {
         internal const string ModName = "ChickenBoo";
-        internal const string ModVersion = "2.1.1";
+        internal const string ModVersion = "2.1.3";
         internal const string ModGUID = "com.zarboz.ChickenBoo";
         public static ServerSync.ConfigSync configSync = new ServerSync.ConfigSync(ModGUID) { DisplayName = ModName, CurrentVersion = ModVersion };
 
@@ -92,6 +92,7 @@ namespace ChickenBoo
                 CheckSpawnInterval = 1400,
                 CanSpawn = true,
                 Maximum = 5,
+                FoodItems = "Dandelion, Blueberries, Raspberry, Acorn, OnionSeeds, CarrotSeeds, TurnipSeeds",
                 ForestSpawn = Forest.Yes,
                 CanBeTamed = true,
                 CanHaveStars = true,
