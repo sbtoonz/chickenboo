@@ -30,6 +30,7 @@ namespace ChickenBoo
         //translation configentries
 
         public static ConfigEntry<string> ChickenName;
+        public static ConfigEntry<string> ChickletName;
         public static ConfigEntry<string> RawChickenTranslation;
         public static ConfigEntry<string> RawChickenDescription;
         public static ConfigEntry<string> RawEggName;
@@ -203,6 +204,9 @@ namespace ChickenBoo
             
             ChickenName = config("Translations", "Chicken Name",
                 "Chicken", new ConfigDescription("This is the in game name for the chicken"));
+            
+            ChickletName = config("Translations", "Chicklet Name",
+                "Chicklet", new ConfigDescription("This is the in game name for the baby chicken"));
 
             RawEggName = config("Translations","Raw Egg Name", "Raw Egg", new ConfigDescription(""));
             
@@ -210,7 +214,7 @@ namespace ChickenBoo
             
             FriedEggName = config("Translations","Fried Egg Name","Fried Egg",new ConfigDescription(""));
             
-            FriedEggDescription = config("Translations","","",new ConfigDescription(""));
+            FriedEggDescription = config("Translations","Fried Egg Description", "A fried egg for any time of day!", new ConfigDescription(""));
             
             BoiledEggName = config("Translations","Boiled Egg Description","A boiled egg for any time of day!",new ConfigDescription(""));
             
