@@ -367,6 +367,7 @@ namespace ChickenBoo
             public static void Prefix()
             {
                 Localization.instance.AddWord("enemy_chicken",ChickenBoo.ChickenName.Value);
+                Localization.instance.AddWord("enemy_chicklet", ChickenBoo.ChickletName.Value);
                 Localization.instance.AddWord("raw_egg",ChickenBoo.RawEggName.Value);
                 Localization.instance.AddWord("raw_egg_descrip",ChickenBoo.RawEggDescription.Value);
                 Localization.instance.AddWord("raw_chicken",ChickenBoo.RawChickenTranslation.Value);
