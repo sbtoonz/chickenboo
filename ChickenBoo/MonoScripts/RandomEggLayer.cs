@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -20,17 +21,23 @@ public class RandomEggLayer : MonoBehaviour
         _monsterAI = GetComponent<MonsterAI>();
         _humanoid = GetComponent<Humanoid>();
     }
-    
+
+    private void Start()
+    {
+        Random.InitState(Time.renderedFrameCount);
+    }
+
     private void OnEnable()
     {
-        InvokeRepeating(nameof(EggLayer), 0f, Random.Range(ChickenBoo.ChickenBoo.MinimumSpawnTimeForEgg.Value, ChickenBoo.ChickenBoo.MaximumSpawnTimeForEgg.Value));
+        StartCoroutine(EggLayer());
     }
     
     
-    private void EggLayer()
+    private IEnumerator EggLayer()
     {
-        if (!_tameable.m_character.m_tamed) return;
-        if (!ShouldLayEgg()) return;
+        if (!_tameable.m_character.m_tamed) yield break;
+        if (!ShouldLayEgg()) yield break;
+        yield return new WaitForSeconds(ChickenBoo.ChickenBoo.MinimumSpawnTimeForEgg.Value);
         var randValue = Random.value;
         switch (randValue)
         {
@@ -51,7 +58,7 @@ public class RandomEggLayer : MonoBehaviour
                         transform.position + transform.forward * 2f + Vector3.up + vector,
                         Quaternion.identity)?.GetComponent(typeof(ItemDrop))!;
                 }
-                if (itemDrop == null || itemDrop.m_itemData == null) return;
+                if (itemDrop == null || itemDrop.m_itemData == null) yield break;
                 itemDrop.m_itemData.m_stack = ChickenBoo.ChickenBoo.SpawnVol1.Value;
                 itemDrop.m_itemData.m_durability = itemDrop.m_itemData.GetMaxDurability();
                 break;
@@ -73,7 +80,7 @@ public class RandomEggLayer : MonoBehaviour
                         transform.position + transform.forward * 2f + Vector3.up + vector,
                         Quaternion.identity)?.GetComponent(typeof(ItemDrop))!;
                 }
-                if (itemDrop == null || itemDrop.m_itemData == null) return;
+                if (itemDrop == null || itemDrop.m_itemData == null) yield break;
                 itemDrop.m_itemData.m_stack = ChickenBoo.ChickenBoo.SpawnVol2.Value;
                 itemDrop.m_itemData.m_durability = itemDrop.m_itemData.GetMaxDurability();
                 ;
@@ -96,7 +103,7 @@ public class RandomEggLayer : MonoBehaviour
                         transform.position + transform.forward * 2f + Vector3.up + vector,
                         Quaternion.identity)?.GetComponent(typeof(ItemDrop))!;
                 }
-                if (itemDrop == null || itemDrop.m_itemData == null) return;
+                if (itemDrop == null || itemDrop.m_itemData == null) yield break;
                 itemDrop.m_itemData.m_stack = ChickenBoo.ChickenBoo.SpawnVol3.Value;
                 itemDrop.m_itemData.m_durability = itemDrop.m_itemData.GetMaxDurability();
                 break;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using UnityEngine;
 
@@ -8,8 +9,10 @@ namespace ChickenBoo
     {
         internal static AssetBundle? LoadAssetBundle(string bundleName)
         {
+            var cultureInfo = CultureInfo.CurrentCulture = new CultureInfo("en-US");
             var resource = typeof(ChickenBoo).Assembly.GetManifestResourceNames().Single
-                (s => s.EndsWith(bundleName));
+                (s => s.EndsWith(bundleName.ToString(cultureInfo)));
+            
             using var stream = typeof(ChickenBoo).Assembly.GetManifestResourceStream(resource);
             return AssetBundle.LoadFromStream(stream);
         }
