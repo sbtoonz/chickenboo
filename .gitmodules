@@ -1,0 +1,6 @@
+[submodule "CreatureManager"]
+	path = CreatureManager
+	url = https://github.com/blaxxun-boop/CreatureManager.git
+[submodule "ServerSync"]
+	path = ServerSync
+	url = https://github.com/blaxxun-boop/ServerSync.git
