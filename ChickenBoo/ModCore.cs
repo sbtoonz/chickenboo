@@ -14,13 +14,14 @@ namespace ChickenBoo
     public class ChickenBoo : BaseUnityPlugin
     {
         internal const string ModName = "ChickenBoo";
-        internal const string ModVersion = "2.1.5";
+        internal const string ModVersion = "2.1.6";
         internal const string ModGUID = "com.zarboz.ChickenBoo";
         internal static ConfigSync configSync = new(ModGUID)
         {
             DisplayName = ModName,
             CurrentVersion = ModVersion, 
             MinimumRequiredVersion = ModVersion,
+            ModRequired = true
         };
         internal static ConfigEntry<bool> useRKEggs;
         internal static ConfigEntry<float> MinimumSpawnTimeForEgg;

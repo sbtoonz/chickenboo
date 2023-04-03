@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Box002Mat
-  m_Shader: {fileID: 4800000, guid: 04f76fafbe90d444fb4ea6f5b0d08798, type: 3}
+  m_Shader: {fileID: 4800000, guid: c646387c3cf7bce48b29cd28eb7373f4, type: 3}
   m_ShaderKeywords: N_F_O_ON N_F_RELGI_ON N_F_SS_ON _ADDRAIN_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -19,6 +19,14 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _FReflection:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -51,6 +59,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _NormalMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -72,6 +84,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ShadowT:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _StyleTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -107,6 +123,7 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 1
     - _HighlightColorPower: 1
+    - _Hue: 0
     - _LightAffectOutlineColor: 0
     - _LightAffectRimLightColor: 0
     - _LightAffectShadow: 0
@@ -116,6 +133,7 @@ Material:
     - _MCIALO: 0
     - _MCapIntensity: 1
     - _MVCOL: 0
+    - _MetalGloss: 0
     - _Metallic: 0
     - _MetallicAlphaGloss: 0
     - _MixMainTexToOutline: 0
@@ -196,11 +214,15 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _Style: 0
     - _TEXMCOLINT: 1
     - _TexturePatternStyle: 0
     - _TwoSidedNormals: 0
     - _UVSec: 0
+    - _UseGlossmap: 0
     - _UseSecondaryCutout: 0
+    - _UseStyles: 0
+    - _Value: 0
     - _ValueNoise: 0.5
     - _ValueNoiseVertex: 0
     - _VertexColorBlueAffectOutlineWitdh: 0
@@ -224,3 +246,4 @@ Material:
     - _SelfShadowRealTimeShadowColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShadowTColor: {r: 1, g: 1, b: 1, a: 1}
     - _XYZPosition: {r: 0, g: 0, b: 0, a: 0}
+  m_BuildTextureStacks: []
